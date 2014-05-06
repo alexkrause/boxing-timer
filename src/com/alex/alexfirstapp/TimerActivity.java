@@ -68,8 +68,15 @@ public class TimerActivity extends ActionBarActivity {
 	    
 	}
 	
-	public void startTimer(View view) {
-		
+	public void toggleTimer(View view) {
+		if (timerLogic.isPaused()) {
+			timerLogic.resumeTimer();
+		    timerHandler.postDelayed(timerRunnable, 0);
+		}
+		else {
+			timerLogic.pauseTimer();
+			timerHandler.removeCallbacks(timerRunnable);
+		}
 	}
 	
 	
@@ -85,10 +92,10 @@ public class TimerActivity extends ActionBarActivity {
 		                             // Request permanent focus.
 		                             AudioManager.AUDIOFOCUS_GAIN_TRANSIENT_MAY_DUCK);
 		   
-//		if (result == AudioManager.AUDIOFOCUS_REQUEST_GRANTED) {
-//			MediaPlayer mediaPlayer = MediaPlayer.create(this, soundId);
-//			mediaPlayer.start();
-//		}
+		if (result == AudioManager.AUDIOFOCUS_REQUEST_GRANTED) {
+			MediaPlayer mediaPlayer = MediaPlayer.create(this, soundId);
+			mediaPlayer.start();
+		}
 	}
 
 	@Override

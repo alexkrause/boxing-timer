@@ -18,13 +18,13 @@
         android:textAppearance="?android:attr/textAppearanceLarge" />
     
     <Button
-        android:id="@+id/button_starttimer"
+        android:id="@+id/button_toggletimer"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:layout_below="@+id/seconds_display"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="14dp"
-        android:text="@string/button_caption_starttimer"
-        android:onClick="startTimer" />
+        android:text="@string/button_caption_toggletimer"
+        android:onClick="toggleTimer" />
 
 </RelativeLayout>

@@ -1,12 +1,35 @@
 package com.alex.alexfirstapp.logic;
 
+import java.math.BigDecimal;
+import java.util.Calendar;
 import java.util.Date;
 
 public class TimerLogic {
 
 	private boolean halfTimeNotificationDone = false;
 	private long initialSeconds = 0;
+	private long pausedSeconds = 0;
+	private boolean paused = false;
 	Date timerStarted;
+	
+	public boolean isPaused() {
+		return paused;
+	}
+
+	public void pauseTimer() {
+		this.paused = true;
+		pausedSeconds = getSecondsLeft();
+	}
+	
+	public void resumeTimer() {
+		Calendar cal = Calendar.getInstance();
+		cal.setTime(new Date());
+		int pausedSecondsInt = (new BigDecimal(initialSeconds - pausedSeconds)).intValue();
+		cal.add(Calendar.SECOND, pausedSecondsInt * (-1));
+		timerStarted = cal.getTime();
+		paused = false;
+	}
+
 	
 	public boolean isHalfTimeNotificationDone() {
 		return halfTimeNotificationDone;

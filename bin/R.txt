@@ -244,7 +244,7 @@ int id action_settings 0x7f060042
 int id activity_chooser_view_content 0x7f060025
 int id always 0x7f06000b
 int id beginning 0x7f060011
-int id button_starttimer 0x7f060041
+int id button_toggletimer 0x7f060041
 int id checkbox 0x7f06002d
 int id collapseActionView 0x7f06000d
 int id container 0x7f06003c
@@ -345,7 +345,7 @@ int string abc_shareactionprovider_share_with_application 0x7f0b000b
 int string action_settings 0x7f0b000f
 int string app_name 0x7f0b000d
 int string button_caption_start 0x7f0b0010
-int string button_caption_starttimer 0x7f0b0011
+int string button_caption_toggletimer 0x7f0b0011
 int string hello_world 0x7f0b000e
 int string textfield_description_seconds 0x7f0b0012
 int string textfield_hint_seconds 0x7f0b0013

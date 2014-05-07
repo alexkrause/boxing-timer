@@ -14,6 +14,8 @@
         android:layout_height="wrap_content"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="170dp"
+        android:textSize="100sp"
+        android:gravity="center" 
         android:hint="@string/textfield_hint_seconds"
         android:textAppearance="?android:attr/textAppearanceLarge" />
     
@@ -24,7 +26,16 @@
         android:layout_below="@+id/seconds_display"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="14dp"
-        android:text="@string/button_caption_toggletimer"
+        android:text="@string/button_caption_pause"
         android:onClick="toggleTimer" />
+
+    <Button
+        android:id="@+id/button_reset_timer"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/button_toggletimer"
+        android:layout_centerHorizontal="true"
+        android:onClick="resetTimer"
+        android:text="@string/button_caption_reset" />
 
 </RelativeLayout>

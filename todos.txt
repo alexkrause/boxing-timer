@@ -1,0 +1,19 @@
+Todos:
+- remember time settings
+- dark background
+- labels for drop down menus
+- don't restart timer on change orientation
+- mute music when playing sounds, resume afterwards
+- checkbox for half time buzzer
+- other sound for half time buzzer
+- nice background image
+- nice app icon
+- about page (menu)
+- licensed soundfiles
+
+
+Done
+- show minutes : seconds
+- change button caption (toogle) on state
+- restart timer
+- large text size for timer

@@ -15,6 +15,18 @@ public class TimerLogic {
 	public boolean isPaused() {
 		return paused;
 	}
+	
+	public boolean isHalfTimeNotificationDone() {
+		return halfTimeNotificationDone;
+	}
+
+	public void setHalfTimeNotificationDone(boolean halfTimeNotificationDone) {
+		this.halfTimeNotificationDone = halfTimeNotificationDone;
+	}
+	
+	public void resetTimer() {
+		timerStarted = new Date();
+	}
 
 	public void pauseTimer() {
 		this.paused = true;
@@ -30,16 +42,6 @@ public class TimerLogic {
 		paused = false;
 	}
 
-	
-	public boolean isHalfTimeNotificationDone() {
-		return halfTimeNotificationDone;
-	}
-
-	public void setHalfTimeNotificationDone(boolean halfTimeNotificationDone) {
-		this.halfTimeNotificationDone = halfTimeNotificationDone;
-	}
-	
-	
 	public TimerLogic(String minutes, String seconds) {
 		
 		long minutesLong = Long.valueOf(minutes);
@@ -60,6 +62,7 @@ public class TimerLogic {
 		
 		return initialSeconds - (currentSeconds - startedSeconds);
 	}
+	
 	
 	public boolean getHalfTimeReached() {
 		

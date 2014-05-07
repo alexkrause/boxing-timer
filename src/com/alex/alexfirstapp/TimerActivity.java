@@ -17,11 +17,12 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.TextView;
 
 public class TimerActivity extends ActionBarActivity {
 
-	private TimerLogic timerLogic;
+	private TimerLogic timerLogic = null;
 	private TextView timerTextView;
     private Handler timerHandler = new Handler();
     
@@ -49,34 +50,50 @@ public class TimerActivity extends ActionBarActivity {
 		}
 		
 	}
-	
+
 	@Override
 	protected void onStart() {
 		super.onStart();
 		timerTextView = (TextView) findViewById(R.id.seconds_display);
-	    
-	    // Get the message from the intent
-	    Intent intent = getIntent();
-	    String minutes = intent.getStringExtra(MainActivity.EXTRA_TIMERMINUTES);
-	    String seconds = intent.getStringExtra(MainActivity.EXTRA_TIMERSECONDS);
-	    
-	    timerLogic = new TimerLogic(minutes, seconds);
-	    
-	    playSound(R.raw.boxing_bell);
-	    
-	    timerHandler.postDelayed(timerRunnable, 0);
-	    
+
+		// Get the message from the intent
+		Intent intent = getIntent();
+		String minutes = intent.getStringExtra(MainActivity.EXTRA_TIMERMINUTES);
+		String seconds = intent.getStringExtra(MainActivity.EXTRA_TIMERSECONDS);
+		timerLogic = new TimerLogic(minutes, seconds);
+		playSound(R.raw.boxing_bell);
+		timerHandler.postDelayed(timerRunnable, 0);
+
 	}
-	
+
 	public void toggleTimer(View view) {
+		Button toggleButton = (Button) findViewById(R.id.button_toggletimer);
+		
 		if (timerLogic.isPaused()) {
 			timerLogic.resumeTimer();
 		    timerHandler.postDelayed(timerRunnable, 0);
+		    toggleButton.setText(R.string.button_caption_pause);
 		}
 		else {
 			timerLogic.pauseTimer();
 			timerHandler.removeCallbacks(timerRunnable);
+			toggleButton.setText(R.string.button_caption_resume);
 		}
+	}
+	
+	public void resetTimer(View view) {
+		timerLogic.resetTimer();
+		updateTimerDisplay();
+		playSound(R.raw.boxing_bell);
+	}
+	
+
+	private void updateTimerDisplay() {
+		updateTimerDisplay(timerLogic.getSecondsLeft());
+	}
+	
+	private void updateTimerDisplay(long secondsLeft) {
+	    timerTextView.setText(String.format("%02d", secondsLeft / 60) + ":" + String.format("%02d", secondsLeft%60));
 	}
 	
 	
@@ -139,10 +156,10 @@ public class TimerActivity extends ActionBarActivity {
 
         @Override
         public void run() {
-        	String secondsLeft = Long.toString(timerLogic.getSecondsLeft());
-    	    timerTextView.setText(secondsLeft);
+        	long secondsLeft = timerLogic.getSecondsLeft();
+    	    updateTimerDisplay(secondsLeft);
     	    
-    	    if (Integer.parseInt(secondsLeft) > 0) {
+    	    if (secondsLeft > 0) {
     	    	if (!timerLogic.isHalfTimeNotificationDone() && timerLogic.getHalfTimeReached()) {
     	    		playSound(R.raw.boxing_bell);
     	    		timerLogic.setHalfTimeNotificationDone(true);

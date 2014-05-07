@@ -5,7 +5,9 @@
     <string name="hello_world">Hello world!</string>
     <string name="action_settings">Settings</string>
     <string name="button_caption_start">Start</string>
-    <string name="button_caption_toggletimer">Toggle</string>
+    <string name="button_caption_pause">Pause</string>
+    <string name="button_caption_resume">Resume</string>
+    <string name="button_caption_reset">Reset</string>
     <string name="textfield_description_seconds">Sekunden</string>
     <string name="textfield_hint_seconds">Sekunden</string>
     <string name="title_activity_timer">TimerActivity</string>

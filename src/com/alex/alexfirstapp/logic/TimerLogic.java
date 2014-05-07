@@ -26,6 +26,10 @@ public class TimerLogic {
 	
 	public void resetTimer() {
 		timerStarted = new Date();
+		
+		if (paused) {
+			pausedSeconds = getSecondsLeft();
+		}
 	}
 
 	public void pauseTimer() {
@@ -40,6 +44,7 @@ public class TimerLogic {
 		cal.add(Calendar.SECOND, pausedSecondsInt * (-1));
 		timerStarted = cal.getTime();
 		paused = false;
+		pausedSeconds = 0;
 	}
 
 	public TimerLogic(String minutes, String seconds) {

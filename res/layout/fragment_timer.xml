@@ -13,7 +13,6 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="170dp"
         android:textSize="100sp"
         android:gravity="center" 
         android:hint="@string/textfield_hint_seconds"
@@ -25,7 +24,6 @@
         android:layout_height="wrap_content"
         android:layout_below="@+id/seconds_display"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="14dp"
         android:text="@string/button_caption_pause"
         android:onClick="toggleTimer" />
 

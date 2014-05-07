@@ -8,24 +8,39 @@
     android:paddingTop="@dimen/activity_vertical_margin"
     tools:context="com.alex.alexfirstapp.MainActivity$PlaceholderFragment" >
 
+
+    <TextView
+        android:id="@+id/label_minutes"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:text="@string/label_minutes" />
+
     <Spinner
         android:id="@+id/minutes_spinner"
         android:layout_width="fill_parent"
-        android:layout_height="wrap_content" />
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/label_minutes" />
+
+    <TextView
+        android:id="@+id/label_seconds"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/minutes_spinner"
+        android:text="@string/label_seconds" />
 
     <Spinner
         android:id="@+id/seconds_spinner"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/minutes_spinner" />
-
+        android:layout_below="@+id/label_seconds" />
+    
     <Button
         android:id="@+id/start_timer"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:layout_below="@+id/seconds_spinner"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="14dp"
         android:onClick="startTimer"
         android:text="@string/button_caption_start" />
 

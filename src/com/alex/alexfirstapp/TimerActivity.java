@@ -109,10 +109,10 @@ public class TimerActivity extends ActionBarActivity {
 		                             // Request permanent focus.
 		                             AudioManager.AUDIOFOCUS_GAIN_TRANSIENT_MAY_DUCK);
 		   
-		if (result == AudioManager.AUDIOFOCUS_REQUEST_GRANTED) {
-			MediaPlayer mediaPlayer = MediaPlayer.create(this, soundId);
-			mediaPlayer.start();
-		}
+//		if (result == AudioManager.AUDIOFOCUS_REQUEST_GRANTED) {
+//			MediaPlayer mediaPlayer = MediaPlayer.create(this, soundId);
+//			mediaPlayer.start();
+//		}
 	}
 
 	@Override

@@ -73,6 +73,9 @@ public class TimerActivity extends ActionBarActivity {
 			timerLogic.resumeTimer();
 		    timerHandler.postDelayed(timerRunnable, 0);
 		    toggleButton.setText(R.string.button_caption_pause);
+		    if(timerLogic.getSecondsLeft() == timerLogic.getInitialSeconds()) {
+				playSound(R.raw.boxing_bell);
+		    }
 		}
 		else {
 			timerLogic.pauseTimer();
@@ -84,7 +87,10 @@ public class TimerActivity extends ActionBarActivity {
 	public void resetTimer(View view) {
 		timerLogic.resetTimer();
 		updateTimerDisplay();
-		playSound(R.raw.boxing_bell);
+		if (!timerLogic.isPaused()) {
+			playSound(R.raw.boxing_bell);
+			timerHandler.postDelayed(timerRunnable, 0);
+		}
 	}
 	
 
@@ -109,13 +115,48 @@ public class TimerActivity extends ActionBarActivity {
 		                             // Request permanent focus.
 		                             AudioManager.AUDIOFOCUS_GAIN_TRANSIENT_MAY_DUCK);
 		   
-//		if (result == AudioManager.AUDIOFOCUS_REQUEST_GRANTED) {
-//			MediaPlayer mediaPlayer = MediaPlayer.create(this, soundId);
-//			mediaPlayer.start();
-//		}
+		if (result == AudioManager.AUDIOFOCUS_REQUEST_GRANTED) {
+			MediaPlayer mediaPlayer = MediaPlayer.create(this, soundId);
+			mediaPlayer.start();
+			am.abandonAudioFocus(afChangeListener);
+		}
+		
+		
 	}
 
-	@Override
+	
+	
+    Runnable timerRunnable = new Runnable() {
+
+        @Override
+        public void run() {
+        	long secondsLeft = timerLogic.getSecondsLeft();
+    	    updateTimerDisplay(secondsLeft);
+    	    
+    	    if (secondsLeft > 0) {
+    	    	if (!timerLogic.isHalfTimeNotificationDone() && timerLogic.getHalfTimeReached()) {
+    	    		playSound(R.raw.boxing_bell);
+    	    		timerLogic.setHalfTimeNotificationDone(true);
+    	    	}
+    	    	timerHandler.postDelayed(this, 1000);
+    	    }
+    	    else {
+    		    playSound(R.raw.boxing_bell_multiple);
+    	    }
+        }
+    };
+    
+
+    @Override
+    public void onPause() {
+          super.onPause();
+          timerHandler.removeCallbacks(timerRunnable);
+    }	
+    
+    
+    /* here comes the boilerplate code */
+    
+    @Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 
 		// Inflate the menu; this adds items to the action bar if it is present.
@@ -151,32 +192,5 @@ public class TimerActivity extends ActionBarActivity {
 			return rootView;
 		}
 	}
-	
-    Runnable timerRunnable = new Runnable() {
-
-        @Override
-        public void run() {
-        	long secondsLeft = timerLogic.getSecondsLeft();
-    	    updateTimerDisplay(secondsLeft);
-    	    
-    	    if (secondsLeft > 0) {
-    	    	if (!timerLogic.isHalfTimeNotificationDone() && timerLogic.getHalfTimeReached()) {
-    	    		playSound(R.raw.boxing_bell);
-    	    		timerLogic.setHalfTimeNotificationDone(true);
-    	    	}
-    	    	timerHandler.postDelayed(this, 1000);
-    	    }
-    	    else {
-    		    playSound(R.raw.boxing_bell_multiple);
-    	    }
-        }
-    };
-    
-
-    @Override
-      public void onPause() {
-          super.onPause();
-          timerHandler.removeCallbacks(timerRunnable);
-    }	
 
 }

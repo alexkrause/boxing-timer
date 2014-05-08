@@ -12,6 +12,10 @@ public class TimerLogic {
 	private boolean paused = false;
 	Date timerStarted;
 	
+	public long getInitialSeconds() {
+		return initialSeconds;
+	}
+	
 	public boolean isPaused() {
 		return paused;
 	}

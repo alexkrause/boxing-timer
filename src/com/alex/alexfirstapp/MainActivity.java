@@ -3,6 +3,7 @@ package com.alex.alexfirstapp;
 import android.support.v7.app.ActionBarActivity;
 import android.support.v4.app.Fragment;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -14,8 +15,11 @@ import android.widget.Spinner;
 
 public class MainActivity extends ActionBarActivity {
 	
-    public final static String EXTRA_TIMERSECONDS = "com.alex.alexfirstapp.SECONDS";
+    private static final String SELECTED_SECONDS_ITEM = "selectedSeconds";
+	private static final String SELECTED_MINUTES_ITEM = "selectedMinutes";
+	public final static String EXTRA_TIMERSECONDS = "com.alex.alexfirstapp.SECONDS";
     public final static String EXTRA_TIMERMINUTES = "com.alex.alexfirstapp.MINUTES";
+	private static final String TIMER_SETTINGS = "timerSettings";
     private Spinner minutesSpinner;
     private Spinner secondsSpinner;
 
@@ -29,21 +33,28 @@ public class MainActivity extends ActionBarActivity {
 			getSupportFragmentManager().beginTransaction()
 					.add(R.id.container, new PlaceholderFragment()).commit();
 		}
-		
 	}
 	
 	@Override
 	protected void onStart() {
 		super.onStart();
+		
+		// load last preferences
+		SharedPreferences settings = getSharedPreferences(TIMER_SETTINGS, 0);
+	    int selectedMinutesItem = Integer.valueOf(settings.getString(SELECTED_MINUTES_ITEM, "0")).intValue();
+	    int selectedSecondsItem = Integer.valueOf(settings.getString(SELECTED_SECONDS_ITEM, "0")).intValue();
+		
 		minutesSpinner = (Spinner) findViewById(R.id.minutes_spinner);
 		ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this, R.array.minutes_array, android.R.layout.simple_spinner_item);
 		adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 		minutesSpinner.setAdapter(adapter);
+		minutesSpinner.setSelection(selectedMinutesItem);
 		
 		secondsSpinner = (Spinner) findViewById(R.id.seconds_spinner);
 		adapter = ArrayAdapter.createFromResource(this, R.array.seconds_array, android.R.layout.simple_spinner_item);
 		adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 		secondsSpinner.setAdapter(adapter);
+		secondsSpinner.setSelection(selectedSecondsItem);
 	}
 
 
@@ -80,6 +91,18 @@ public class MainActivity extends ActionBarActivity {
 		intent.putExtra(EXTRA_TIMERSECONDS, seconds);
 
 		startActivity(intent);
+	}
+	
+	@Override
+	public void onPause() {
+		super.onPause();
+		
+		// save settings
+		SharedPreferences settings = getSharedPreferences(TIMER_SETTINGS, 0);
+	    SharedPreferences.Editor editor = settings.edit();
+	    editor.putString(SELECTED_MINUTES_ITEM, Integer.toString(minutesSpinner.getSelectedItemPosition()));
+	    editor.putString(SELECTED_SECONDS_ITEM, Integer.toString(minutesSpinner.getSelectedItemPosition()));
+	    editor.commit();
 	}
 
 	/**

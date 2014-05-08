@@ -1,17 +1,23 @@
 Todos:
-- remember time settings
-- dark background
-- labels for drop down menus
-- mute music when playing sounds, resume afterwards
-- checkbox for half time buzzer
+- about page (menu)
+- number of rounds, round indicator
+- rest time
 - other sound for half time buzzer
+- licensed soundfiles
+- dark background
 - nice background image
 - nice app icon
-- about page (menu)
-- licensed soundfiles
+	-- mickey maus hand mit uhr
+- change colour when nearly finished
+- change colour during rest time
 
 
 Done
+- checkbox for half time buzzer
+- checkbox for playing sounds
+- remember time settings
+- mute music when playing sounds, resume afterwards
+- labels for drop down menus
 - orientation portrait only
 - show minutes : seconds
 - change button caption (toogle) on state

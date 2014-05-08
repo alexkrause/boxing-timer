@@ -13,6 +13,10 @@
     <string name="title_activity_timer">TimerActivity</string>
     <string name="label_minutes">Minutes</string>
     <string name="label_seconds">Seconds</string>
+    <string name="label_checkbox_play_sounds">Play Sounds</string>
+    <string name="label_checkbox_play_halftime_sound">Play Halftime Sound</string>
+    
+    
     
     <string-array name="minutes_array">
         <item>0</item>

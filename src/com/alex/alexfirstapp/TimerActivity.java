@@ -25,6 +25,9 @@ public class TimerActivity extends ActionBarActivity {
 	private TimerLogic timerLogic = null;
 	private TextView timerTextView;
     private Handler timerHandler = new Handler();
+    boolean playSounds = true;
+    boolean playHalftimeSounds = true;
+
     
     OnAudioFocusChangeListener afChangeListener = new OnAudioFocusChangeListener() {
 	    public void onAudioFocusChange(int focusChange) {
@@ -60,6 +63,9 @@ public class TimerActivity extends ActionBarActivity {
 		Intent intent = getIntent();
 		String minutes = intent.getStringExtra(MainActivity.EXTRA_TIMERMINUTES);
 		String seconds = intent.getStringExtra(MainActivity.EXTRA_TIMERSECONDS);
+		playSounds = intent.getBooleanExtra(MainActivity.EXTRA_PLAYSOUNDS, true);
+		playHalftimeSounds = intent.getBooleanExtra(MainActivity.EXTRA_PLAYHALFTIMESOUND, true);
+
 		timerLogic = new TimerLogic(minutes, seconds);
 		playSound(R.raw.boxing_bell);
 		timerHandler.postDelayed(timerRunnable, 0);
@@ -105,8 +111,10 @@ public class TimerActivity extends ActionBarActivity {
 	
 	public void playSound(int soundId){
 		
-		AudioManager am = (AudioManager) this.getSystemService(Context.AUDIO_SERVICE);
+		if (!playSounds)
+			return;
 		
+		AudioManager am = (AudioManager) this.getSystemService(Context.AUDIO_SERVICE);
 		
 		// Request audio focus for playback
 		int result = am.requestAudioFocus(afChangeListener,
@@ -135,7 +143,10 @@ public class TimerActivity extends ActionBarActivity {
     	    
     	    if (secondsLeft > 0) {
     	    	if (!timerLogic.isHalfTimeNotificationDone() && timerLogic.getHalfTimeReached()) {
-    	    		playSound(R.raw.boxing_bell);
+    	    		if (playHalftimeSounds ) {
+    	    			playSound(R.raw.boxing_bell);
+    	    		}
+    	    		
     	    		timerLogic.setHalfTimeNotificationDone(true);
     	    	}
     	    	timerHandler.postDelayed(this, 1000);

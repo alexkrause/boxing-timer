@@ -35,13 +35,31 @@
         android:layout_height="wrap_content"
         android:layout_below="@+id/label_seconds" />
     
+    <CheckBox
+        android:id="@+id/checkbox_play_sounds"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/seconds_spinner"
+        android:text="@string/label_checkbox_play_sounds"
+        android:checked="true" />
+    
+    <CheckBox
+        android:id="@+id/checkbox_play_halftime_sound"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/checkbox_play_sounds"
+        android:text="@string/label_checkbox_play_halftime_sound"
+        android:checked="true" />
+    
     <Button
         android:id="@+id/start_timer"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/seconds_spinner"
+        android:layout_below="@+id/checkbox_play_halftime_sound"
         android:layout_centerHorizontal="true"
         android:onClick="startTimer"
         android:text="@string/button_caption_start" />
+
+    
 
 </RelativeLayout>

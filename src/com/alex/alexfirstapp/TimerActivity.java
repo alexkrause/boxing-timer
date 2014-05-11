@@ -7,6 +7,7 @@ import android.support.v7.app.ActionBarActivity;
 import android.support.v4.app.Fragment;
 import android.content.Context;
 import android.content.Intent;
+import android.content.res.Resources;
 import android.media.AudioManager;
 import android.media.AudioManager.OnAudioFocusChangeListener;
 import android.media.MediaPlayer;
@@ -24,6 +25,7 @@ public class TimerActivity extends ActionBarActivity {
 
 	private TimerLogic timerLogic = null;
 	private TextView timerTextView;
+	private TextView roundsTextView;
     private Handler timerHandler = new Handler();
     boolean playSounds = true;
     boolean playHalftimeSounds = true;
@@ -58,15 +60,18 @@ public class TimerActivity extends ActionBarActivity {
 	protected void onStart() {
 		super.onStart();
 		timerTextView = (TextView) findViewById(R.id.seconds_display);
+		roundsTextView = (TextView) findViewById(R.id.rounds_display);
 
 		// Get the message from the intent
 		Intent intent = getIntent();
 		String minutes = intent.getStringExtra(MainActivity.EXTRA_TIMERMINUTES);
 		String seconds = intent.getStringExtra(MainActivity.EXTRA_TIMERSECONDS);
+		String secondsRest = intent.getStringExtra(MainActivity.EXTRA_TIMERSECONDS_REST);
+		String rounds = intent.getStringExtra(MainActivity.EXTRA_ROUNDS);
 		playSounds = intent.getBooleanExtra(MainActivity.EXTRA_PLAYSOUNDS, true);
 		playHalftimeSounds = intent.getBooleanExtra(MainActivity.EXTRA_PLAYHALFTIMESOUND, true);
 
-		timerLogic = new TimerLogic(minutes, seconds);
+		timerLogic = new TimerLogic(minutes, seconds, secondsRest, rounds);
 		playSound(R.raw.boxing_bell);
 		timerHandler.postDelayed(timerRunnable, 0);
 
@@ -106,8 +111,10 @@ public class TimerActivity extends ActionBarActivity {
 	
 	private void updateTimerDisplay(long secondsLeft) {
 	    timerTextView.setText(String.format("%02d", secondsLeft / 60) + ":" + String.format("%02d", secondsLeft%60));
+	    Resources res = getResources();
+	    String currentRound = res.getString(R.string.label_current_round) + " " + Long.valueOf(timerLogic.getCurrentRound());
+		roundsTextView.setText(currentRound);
 	}
-	
 	
 	public void playSound(int soundId){
 		
@@ -131,7 +138,6 @@ public class TimerActivity extends ActionBarActivity {
 		
 		
 	}
-
 	
 	
     Runnable timerRunnable = new Runnable() {
@@ -139,7 +145,6 @@ public class TimerActivity extends ActionBarActivity {
         @Override
         public void run() {
         	long secondsLeft = timerLogic.getSecondsLeft();
-    	    updateTimerDisplay(secondsLeft);
     	    
     	    if (secondsLeft > 0) {
     	    	if (!timerLogic.isHalfTimeNotificationDone() && timerLogic.getHalfTimeReached()) {
@@ -149,11 +154,18 @@ public class TimerActivity extends ActionBarActivity {
     	    		
     	    		timerLogic.setHalfTimeNotificationDone(true);
     	    	}
-    	    	timerHandler.postDelayed(this, 1000);
+    	    	timerHandler.postDelayed(this, 100);
     	    }
     	    else {
-    		    playSound(R.raw.boxing_bell_multiple);
+    		    if (!timerLogic.isRestMode()) {
+    		    	playSound(R.raw.boxing_bell_multiple);
+    		    }
+    		    if (!timerLogic.isTimerFinished()) {
+    		    	timerHandler.postDelayed(this, 100);
+    		    }
     	    }
+    	    
+    	    updateTimerDisplay(secondsLeft);
         }
     };
     

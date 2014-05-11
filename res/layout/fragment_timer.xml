@@ -7,6 +7,16 @@
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
     tools:context="com.alex.alexfirstapp.TimerActivity$PlaceholderFragment" >
+    
+    <TextView
+        android:id="@+id/rounds_display"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:textSize="75sp"
+        android:gravity="center" 
+        android:hint="@string/textfield_hint_rounds"
+        android:textAppearance="?android:attr/textAppearanceMedium" />
 
     <TextView
         android:id="@+id/seconds_display"
@@ -15,6 +25,7 @@
         android:layout_centerHorizontal="true"
         android:textSize="100sp"
         android:gravity="center" 
+        android:layout_below="@+id/rounds_display"
         android:hint="@string/textfield_hint_seconds"
         android:textAppearance="?android:attr/textAppearanceLarge" />
     

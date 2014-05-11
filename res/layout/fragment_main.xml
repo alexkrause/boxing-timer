@@ -35,11 +35,37 @@
         android:layout_height="wrap_content"
         android:layout_below="@+id/label_seconds" />
     
+    <TextView
+        android:id="@+id/label_seconds_rest"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/seconds_spinner"
+        android:text="@string/label_seconds_rest" />
+
+    <Spinner
+        android:id="@+id/seconds_rest_spinner"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/label_seconds_rest" />
+    
+    <TextView
+        android:id="@+id/label_rounds"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/seconds_rest_spinner"
+        android:text="@string/label_rounds" />
+
+    <Spinner
+        android:id="@+id/rounds_spinner"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/label_rounds" />
+    
     <CheckBox
         android:id="@+id/checkbox_play_sounds"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/seconds_spinner"
+        android:layout_below="@+id/rounds_spinner"
         android:text="@string/label_checkbox_play_sounds"
         android:checked="true" />
     

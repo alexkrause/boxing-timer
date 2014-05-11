@@ -1,7 +1,9 @@
 Todos:
+- playback of sound strange when switching between rest and active mode
+- rest time colour indicator
 - about page (menu)
-- number of rounds, round indicator
-- rest time
+- document the code
+- write unit Tests for logic class
 - other sound for half time buzzer
 - licensed soundfiles
 - dark background
@@ -13,6 +15,9 @@ Todos:
 
 
 Done
+- switching between rest and active looks strange
+- rest time
+- number of rounds, round indicator
 - checkbox for half time buzzer
 - checkbox for playing sounds
 - remember time settings

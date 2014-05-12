@@ -1,6 +1,9 @@
 package com.alex.alexfirstapp;
 
 
+import java.util.Observable;
+import java.util.Observer;
+
 import com.alex.alexfirstapp.logic.TimerLogic;
 
 import android.support.v7.app.ActionBarActivity;
@@ -21,7 +24,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
 
-public class TimerActivity extends ActionBarActivity {
+public class TimerActivity extends ActionBarActivity implements Observer {
 
 	private TimerLogic timerLogic = null;
 	private TextView timerTextView;
@@ -99,18 +102,25 @@ public class TimerActivity extends ActionBarActivity {
 		timerLogic.resetTimer();
 		updateTimerDisplay();
 		if (!timerLogic.isPaused()) {
-			playSound(R.raw.boxing_bell);
 			timerHandler.postDelayed(timerRunnable, 0);
 		}
 	}
 	
 
 	private void updateTimerDisplay() {
-		updateTimerDisplay(timerLogic.getSecondsLeft());
+		updateTimerDisplay(timerLogic);
 	}
 	
-	private void updateTimerDisplay(long secondsLeft) {
+	private void updateTimerDisplay(TimerLogic timerLogic) {
+		long secondsLeft = timerLogic.getSecondsLeft();
 	    timerTextView.setText(String.format("%02d", secondsLeft / 60) + ":" + String.format("%02d", secondsLeft%60));
+	    
+	    if (!timerLogic.isRestMode()) {
+	    	timerTextView.setTextColor(getResources().getColor(R.color.timer_green));
+	    }
+	    else {
+	    	timerTextView.setTextColor(getResources().getColor(R.color.timer_red));
+	    }
 	    Resources res = getResources();
 	    String currentRound = res.getString(R.string.label_current_round) + " " + Long.valueOf(timerLogic.getCurrentRound());
 		roundsTextView.setText(currentRound);
@@ -139,6 +149,21 @@ public class TimerActivity extends ActionBarActivity {
 		
 	}
 	
+	public void update(Observable obj, Object arg) {
+        if (arg instanceof String) {
+            String eventType = (String) arg;
+            if (timerLogic.TIMER_EVENT_ACTIVE_TIME_FINISHED.equals(eventType)) {
+            	playSound(R.raw.boxing_bell_multiple);
+            }
+            else if (timerLogic.TIMER_EVENT_BEGIN_ROUND.equals(eventType)) {
+            	playSound(R.raw.boxing_bell);
+            }
+            else if(timerLogic.TIMER_EVENT_HALFTIME_REACHED.equals(eventType)) {
+            	playSound(R.raw.boxing_bell);
+            }
+        }
+    }
+	
 	
     Runnable timerRunnable = new Runnable() {
 
@@ -147,13 +172,6 @@ public class TimerActivity extends ActionBarActivity {
         	long secondsLeft = timerLogic.getSecondsLeft();
     	    
     	    if (secondsLeft > 0) {
-    	    	if (!timerLogic.isHalfTimeNotificationDone() && timerLogic.getHalfTimeReached()) {
-    	    		if (playHalftimeSounds ) {
-    	    			playSound(R.raw.boxing_bell);
-    	    		}
-    	    		
-    	    		timerLogic.setHalfTimeNotificationDone(true);
-    	    	}
     	    	timerHandler.postDelayed(this, 100);
     	    }
     	    else {
@@ -165,7 +183,7 @@ public class TimerActivity extends ActionBarActivity {
     		    }
     	    }
     	    
-    	    updateTimerDisplay(secondsLeft);
+    	    updateTimerDisplay(timerLogic);
         }
     };
     

@@ -3,9 +3,15 @@ package com.alex.alexfirstapp.logic;
 import java.math.BigDecimal;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.Observable;
 
-public class TimerLogic {
+public class TimerLogic extends Observable {
 
+	public String TIMER_EVENT_BEGIN_ROUND = "beginRound";
+	public String TIMER_EVENT_ACTIVE_TIME_FINISHED = "activeTimeFinished";
+	public String TIMER_EVENT_HALFTIME_REACHED = "halfTimeReached";
+	
+	
 	private boolean halfTimeNotificationDone = false;
 	private long initialSeconds = 0;
 	private long initialSecondsRest = 10;
@@ -124,15 +130,19 @@ public class TimerLogic {
 			
 			// this is the moment when we switch from rest mode to active mode
 			if (restMode) {
+				notifyObservers(TIMER_EVENT_BEGIN_ROUND);
 		    	nextRound();
 				restMode = false;
 			}
 			else {
+				notifyObservers(TIMER_EVENT_ACTIVE_TIME_FINISHED);
+				
 				// no rest phase after last round, so increase round counter here already
 				if (isLastRound()) {
 					nextRound();
 				}
 				restMode = true;
+				
 			}
 			timerStarted = new Date();
 			return 0;

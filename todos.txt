@@ -1,8 +1,9 @@
 Todos:
-- playback of sound strange when switching between rest and active mode
+- finish sound implementation based on Observer pattern
 - rest time colour indicator
 - about page (menu)
 - document the code
+ rename refernces to alexfirstapp to circuitTimer
 - write unit Tests for logic class
 - other sound for half time buzzer
 - licensed soundfiles

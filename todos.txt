@@ -1,6 +1,5 @@
 Todos:
 - finish sound implementation based on Observer pattern
-- rest time colour indicator
 - about page (menu)
 - document the code
  rename refernces to alexfirstapp to circuitTimer
@@ -16,6 +15,7 @@ Todos:
 
 
 Done
+- rest time colour indicator
 - switching between rest and active looks strange
 - rest time
 - number of rounds, round indicator

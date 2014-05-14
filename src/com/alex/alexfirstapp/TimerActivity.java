@@ -1,6 +1,7 @@
 package com.alex.alexfirstapp;
 
 
+
 import java.util.Observable;
 import java.util.Observer;
 
@@ -15,7 +16,6 @@ import android.media.AudioManager;
 import android.media.AudioManager.OnAudioFocusChangeListener;
 import android.media.MediaPlayer;
 import android.os.Bundle;
-import android.os.Handler;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -29,7 +29,6 @@ public class TimerActivity extends ActionBarActivity implements Observer {
 	private TimerLogic timerLogic = null;
 	private TextView timerTextView;
 	private TextView roundsTextView;
-    private Handler timerHandler = new Handler();
     boolean playSounds = true;
     boolean playHalftimeSounds = true;
 
@@ -56,7 +55,6 @@ public class TimerActivity extends ActionBarActivity implements Observer {
 			getSupportFragmentManager().beginTransaction()
 					.add(R.id.container, new PlaceholderFragment()).commit();
 		}
-		
 	}
 
 	@Override
@@ -75,8 +73,11 @@ public class TimerActivity extends ActionBarActivity implements Observer {
 		playHalftimeSounds = intent.getBooleanExtra(MainActivity.EXTRA_PLAYHALFTIMESOUND, true);
 
 		timerLogic = new TimerLogic(minutes, seconds, secondsRest, rounds);
+		updateTimerDisplay();
 		playSound(R.raw.boxing_bell);
-		timerHandler.postDelayed(timerRunnable, 0);
+		timerLogic.runTimer();
+		timerLogic.addObserver(this);
+
 
 	}
 
@@ -85,15 +86,14 @@ public class TimerActivity extends ActionBarActivity implements Observer {
 		
 		if (timerLogic.isPaused()) {
 			timerLogic.resumeTimer();
-		    timerHandler.postDelayed(timerRunnable, 0);
-		    toggleButton.setText(R.string.button_caption_pause);
+			timerLogic.runTimer();
+			toggleButton.setText(R.string.button_caption_pause);
 		    if(timerLogic.getSecondsLeft() == timerLogic.getInitialSeconds()) {
 				playSound(R.raw.boxing_bell);
 		    }
 		}
 		else {
 			timerLogic.pauseTimer();
-			timerHandler.removeCallbacks(timerRunnable);
 			toggleButton.setText(R.string.button_caption_resume);
 		}
 	}
@@ -102,7 +102,7 @@ public class TimerActivity extends ActionBarActivity implements Observer {
 		timerLogic.resetTimer();
 		updateTimerDisplay();
 		if (!timerLogic.isPaused()) {
-			timerHandler.postDelayed(timerRunnable, 0);
+			timerLogic.runTimer();
 		}
 	}
 	
@@ -150,48 +150,28 @@ public class TimerActivity extends ActionBarActivity implements Observer {
 	}
 	
 	public void update(Observable obj, Object arg) {
+		
         if (arg instanceof String) {
             String eventType = (String) arg;
-            if (timerLogic.TIMER_EVENT_ACTIVE_TIME_FINISHED.equals(eventType)) {
+            if (TimerLogic.TIMER_EVENT_ACTIVE_TIME_FINISHED.equals(eventType)) {
             	playSound(R.raw.boxing_bell_multiple);
             }
-            else if (timerLogic.TIMER_EVENT_BEGIN_ROUND.equals(eventType)) {
+            else if (TimerLogic.TIMER_EVENT_BEGIN_ROUND.equals(eventType)) {
             	playSound(R.raw.boxing_bell);
             }
-            else if(timerLogic.TIMER_EVENT_HALFTIME_REACHED.equals(eventType)) {
+            else if(TimerLogic.TIMER_EVENT_HALFTIME_REACHED.equals(eventType)) {
             	playSound(R.raw.boxing_bell);
             }
         }
+        
+        updateTimerDisplay();
     }
 	
 	
-    Runnable timerRunnable = new Runnable() {
-
-        @Override
-        public void run() {
-        	long secondsLeft = timerLogic.getSecondsLeft();
-    	    
-    	    if (secondsLeft > 0) {
-    	    	timerHandler.postDelayed(this, 100);
-    	    }
-    	    else {
-    		    if (!timerLogic.isRestMode()) {
-    		    	playSound(R.raw.boxing_bell_multiple);
-    		    }
-    		    if (!timerLogic.isTimerFinished()) {
-    		    	timerHandler.postDelayed(this, 100);
-    		    }
-    	    }
-    	    
-    	    updateTimerDisplay(timerLogic);
-        }
-    };
-    
-
     @Override
     public void onPause() {
-          super.onPause();
-          timerHandler.removeCallbacks(timerRunnable);
+    	super.onPause();
+    	timerLogic.pauseTimer();
     }	
     
     

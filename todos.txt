@@ -1,4 +1,5 @@
 Todos:
+- 0 second rounds make the bell ring all the time
 - finish sound implementation based on Observer pattern
 - rest time colour indicator
 - about page (menu)

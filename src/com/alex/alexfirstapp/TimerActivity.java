@@ -16,6 +16,8 @@ import android.media.AudioManager;
 import android.media.AudioManager.OnAudioFocusChangeListener;
 import android.media.MediaPlayer;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -26,12 +28,13 @@ import android.widget.TextView;
 
 public class TimerActivity extends ActionBarActivity implements Observer {
 
+	private static final int SCREEN_UPDATE_INTERVAL = 200;
 	private TimerLogic timerLogic = null;
 	private TextView timerTextView;
 	private TextView roundsTextView;
-    boolean playSounds = true;
-    boolean playHalftimeSounds = true;
-
+    private boolean playSounds = true;
+    private boolean playHalftimeSounds = true;
+    private Handler handler = new Handler();
     
     OnAudioFocusChangeListener afChangeListener = new OnAudioFocusChangeListener() {
 	    public void onAudioFocusChange(int focusChange) {
@@ -77,16 +80,22 @@ public class TimerActivity extends ActionBarActivity implements Observer {
 		playSound(R.raw.boxing_bell);
 		timerLogic.addObserver(this);
 		timerLogic.runTimer();
-
-
+		handler.postDelayed(updateTimerRunner, SCREEN_UPDATE_INTERVAL);
 	}
 
+	/**
+	 * switch between paused and active mode. Paused stops the timer in it's current state and also stops screen refreshes.
+	 * Resume restarts it and resumes the updating of the screen.
+	 * 
+	 * @param view
+	 */
 	public void toggleTimer(View view) {
 		Button toggleButton = (Button) findViewById(R.id.button_toggletimer);
 		
 		if (timerLogic.isPaused()) {
 			timerLogic.resumeTimer();
 			timerLogic.runTimer();
+			handler.postDelayed(updateTimerRunner, SCREEN_UPDATE_INTERVAL);
 			toggleButton.setText(R.string.button_caption_pause);
 		    if(timerLogic.getSecondsLeft() == timerLogic.getInitialSeconds()) {
 				playSound(R.raw.boxing_bell);
@@ -95,6 +104,7 @@ public class TimerActivity extends ActionBarActivity implements Observer {
 		else {
 			timerLogic.pauseTimer();
 			toggleButton.setText(R.string.button_caption_resume);
+			handler.removeCallbacks(updateTimerRunner);
 		}
 	}
 	
@@ -124,10 +134,16 @@ public class TimerActivity extends ActionBarActivity implements Observer {
 	    	timerTextView.setTextColor(getResources().getColor(R.color.timer_red));
 	    }
 	    Resources res = getResources();
-	    String currentRound = res.getString(R.string.label_current_round) + " " + Long.valueOf(timerLogic.getCurrentRound());
+	    String currentRound = res.getString(R.string.label_current_round) + " " + Long.valueOf(timerLogic.getCurrentRoundForDisplay());
 		roundsTextView.setText(currentRound);
 	}
 	
+	
+	/**
+	 * Play the sound defined by it's resource ID if the instance variable playSounds is set to true.
+	 * 
+	 * @param soundId
+	 */
 	public void playSound(int soundId){
 		
 		if (!playSounds)
@@ -153,8 +169,6 @@ public class TimerActivity extends ActionBarActivity implements Observer {
 	
 	public void update(Observable obj, Object arg) {
 		
-		updateTimerDisplay();
-		
         if (arg instanceof String) {
             String eventType = (String) arg;
             if (TimerLogic.TIMER_EVENT_ACTIVE_TIME_FINISHED.equals(eventType)) {
@@ -163,7 +177,7 @@ public class TimerActivity extends ActionBarActivity implements Observer {
             else if (TimerLogic.TIMER_EVENT_BEGIN_ROUND.equals(eventType)) {
             	playSound(R.raw.boxing_bell);
             }
-            else if(TimerLogic.TIMER_EVENT_HALFTIME_REACHED.equals(eventType)) {
+            else if(TimerLogic.TIMER_EVENT_HALFTIME_REACHED.equals(eventType) && playHalftimeSounds) {
             	playSound(R.raw.boxing_bell);
             }
         }
@@ -175,7 +189,18 @@ public class TimerActivity extends ActionBarActivity implements Observer {
     public void onPause() {
     	super.onPause();
     	timerLogic.pauseTimer();
+    	handler.removeCallbacks(updateTimerRunner);
     }	
+    
+    
+    final Runnable updateTimerRunner = new Runnable()
+    {
+        public void run() 
+        {
+            updateTimerDisplay();
+        	handler.postDelayed(this, SCREEN_UPDATE_INTERVAL);
+        }
+    };
     
     
     /* here comes the boilerplate code */
@@ -216,5 +241,7 @@ public class TimerActivity extends ActionBarActivity implements Observer {
 			return rootView;
 		}
 	}
+	
+	
 
 }

@@ -9,11 +9,9 @@ import java.util.concurrent.TimeUnit;
 
 public class TimerLogic extends Observable {
 
-	public static final String UPDATE_TIMER_DISPLAY = "updateDisplay";
 	public static final String TIMER_EVENT_BEGIN_ROUND = "beginRound";
 	public static final String TIMER_EVENT_ACTIVE_TIME_FINISHED = "activeTimeFinished";
 	public static final String TIMER_EVENT_HALFTIME_REACHED = "halfTimeReached";
-
 
 	private boolean halfTimeNotificationDone = false;
 	private long initialSeconds = 0;
@@ -26,12 +24,6 @@ public class TimerLogic extends Observable {
 
 	Date timerStarted;
 
-	public long getCurrentRound() {
-		if (currentRound < maxRounds) {
-			return currentRound;
-		}
-		return maxRounds;
-	}
 
 	public boolean isRestMode() {
 		return restMode;
@@ -50,6 +42,14 @@ public class TimerLogic extends Observable {
 	}
 
 
+	/**
+	 * Constructor for TimerLogic.
+	 * 
+	 * @param minutes Duration of rounds in minutes
+	 * @param seconds Duration of rounds in seconds (on top of minutes)
+	 * @param secondsRest Duration of rest period
+	 * @param rounds Number of rounds
+	 */
 	public TimerLogic(String minutes, String seconds, String secondsRest, String rounds) {
 
 		long minutesLong = Long.valueOf(minutes);
@@ -63,6 +63,9 @@ public class TimerLogic extends Observable {
 		restMode = false;
 	}
 
+	/**
+	 * reset the timer to it's initial settings (as defined in the constructor)
+	 */
 	public void resetTimer() {
 		timerStarted = new Date();
 		restMode = false;
@@ -76,6 +79,19 @@ public class TimerLogic extends Observable {
 		}
 	}
 
+	/**
+	 * @return current round number. If currentRound > maxRound use the latter for displaying.
+	 */
+	public long getCurrentRoundForDisplay() {
+		if (currentRound < maxRounds) {
+			return currentRound;
+		}
+		return maxRounds;
+	}
+	
+	/**
+	 * switch to the next round in case the current one is not the last one.
+	 */
 	public void nextRound() {
 		halfTimeNotificationDone = false;
 		if (currentRound <= maxRounds) {
@@ -97,19 +113,21 @@ public class TimerLogic extends Observable {
 		return false;
 	}
 
+	/**
+	 * Pause the timer and remember the remaining time, so that it can proceed later.
+	 */
 	public void pauseTimer() {
 		this.paused = true;
 		pausedSeconds = getSecondsLeft();
 	}
 
+	/**
+	 * resume a paused timer
+	 */
 	public void resumeTimer() {
 		Calendar cal = Calendar.getInstance();
 		cal.setTime(new Date());
-		long secondsBase = initialSeconds;
-
-		if (restMode) {
-			secondsBase = initialSecondsRest;
-		}
+		long secondsBase = getSecondsBase();
 
 		// calculate new start time
 		int pausedSecondsInt = (new BigDecimal(secondsBase - pausedSeconds)).intValue();
@@ -122,26 +140,40 @@ public class TimerLogic extends Observable {
 		runTimer();
 	}
 
+	/**
+	 * @return Number of seconds left for the current state of the timer (active time or rest time).
+	 */
 	public long getSecondsLeft() {
 
 		long currentSeconds = (new Date()).getTime() / 1000;
 		long startedSeconds = timerStarted.getTime() / 1000;
-		long secondsBase = initialSeconds;
-
-		if (restMode) {
-			secondsBase = initialSecondsRest;
-		}
+		long secondsBase = getSecondsBase();
 		
-		// add one second to secondsBase to make the displaying smoother when switching between rest and active mode
-		if ( (currentSeconds - startedSeconds) >= secondsBase+1) {
-			timerStarted = new Date();
+		// subtract one seconds for smoothening out the displaying of seconds
+		long secondsLeft = secondsBase - (currentSeconds - startedSeconds  -1);
+		if (secondsLeft < 0) {
 			return 0;
 		}
+		if (secondsLeft > secondsBase) {
+			return secondsBase;
+		}
+		return secondsLeft;
+	}
 
-		return secondsBase - (currentSeconds - startedSeconds);
+	/**
+	 * @return Number of seconds to start with. Either initial active time or initial rest time.
+	 */
+	private long getSecondsBase() {
+		if (restMode) {
+			return initialSecondsRest;
+		}
+		return initialSeconds;
 	}
 
 
+	/**
+	 * @return true if the half of the active time has been reached. Always false for rest mode.
+	 */
 	public boolean getHalfTimeReached() {
 
 		if (!restMode && getSecondsLeft() <= initialSeconds / 2) {
@@ -151,18 +183,15 @@ public class TimerLogic extends Observable {
 		return false;
 	}
 
-	private void executeEvent(String eventName) {
-		notifyObservers(TIMER_EVENT_BEGIN_ROUND);
-	}
 	
 	
 	public void runTimer() {
 		
-		if (!isPaused()) {
+		if (!paused && !isTimerFinished()) {
 		
 			Executors.newSingleThreadScheduledExecutor().schedule(
 					runnable,
-					1000,
+					200,
 					TimeUnit.MILLISECONDS);
 		}
 	}
@@ -171,40 +200,41 @@ public class TimerLogic extends Observable {
 		@Override
 		public void run() {
 			
-			runTimer();
-			
 			long secondsLeft = getSecondsLeft();
 			setChanged();
 
 			if (secondsLeft <= 0) {
 				// this is the moment when we switch from rest mode to active mode
 				if (restMode) {
-					executeEvent(TIMER_EVENT_BEGIN_ROUND);
+					notifyObservers(TIMER_EVENT_BEGIN_ROUND);
 					nextRound();
 					restMode = false;
 				}
 				else {
-					executeEvent(TIMER_EVENT_ACTIVE_TIME_FINISHED);
+					notifyObservers(TIMER_EVENT_ACTIVE_TIME_FINISHED);
 		
 					// no rest phase after last round, so increase round counter here already
 					if (isLastRound()) {
 						nextRound();
 					}
-					restMode = true;
+					else {
+						restMode = true;
+					}
+				}
+				
+				if ( !isTimerFinished()) {
+					timerStarted = new Date();
 				}
 			}
 			else {
 				// check for half time
 				if (getHalfTimeReached() && !halfTimeNotificationDone) {
-					executeEvent(TIMER_EVENT_HALFTIME_REACHED);
+					notifyObservers(TIMER_EVENT_HALFTIME_REACHED);
 					halfTimeNotificationDone = true;
 				}
 					
 			}
-			
-			executeEvent(UPDATE_TIMER_DISPLAY);
-			
-    	    
+			runTimer();
 		}
 	};
 

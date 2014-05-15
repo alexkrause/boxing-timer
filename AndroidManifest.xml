@@ -26,7 +26,7 @@
         </activity>
         <activity
             android:name="com.alex.alexfirstapp.TimerActivity"
-            android:label="@string/title_activity_timer"
+            android:label="@string/app_name"
             android:parentActivityName="com.alex.alexfirstapp.MainActivity"
             android:configChanges="orientation"
     		android:screenOrientation="portrait" >

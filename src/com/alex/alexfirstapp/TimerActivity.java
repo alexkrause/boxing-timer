@@ -75,8 +75,8 @@ public class TimerActivity extends ActionBarActivity implements Observer {
 		timerLogic = new TimerLogic(minutes, seconds, secondsRest, rounds);
 		updateTimerDisplay();
 		playSound(R.raw.boxing_bell);
-		timerLogic.runTimer();
 		timerLogic.addObserver(this);
+		timerLogic.runTimer();
 
 
 	}
@@ -98,20 +98,22 @@ public class TimerActivity extends ActionBarActivity implements Observer {
 		}
 	}
 	
+	
+	/**
+	 * button action for resetting the timer (reset start time and round counter)
+	 * 
+	 * @param view
+	 */
 	public void resetTimer(View view) {
 		timerLogic.resetTimer();
 		updateTimerDisplay();
-		if (!timerLogic.isPaused()) {
-			timerLogic.runTimer();
-		}
 	}
 	
 
+	/**
+	 * repaint the timer screen: remaining time, color of remaining time, round counter
+	 */
 	private void updateTimerDisplay() {
-		updateTimerDisplay(timerLogic);
-	}
-	
-	private void updateTimerDisplay(TimerLogic timerLogic) {
 		long secondsLeft = timerLogic.getSecondsLeft();
 	    timerTextView.setText(String.format("%02d", secondsLeft / 60) + ":" + String.format("%02d", secondsLeft%60));
 	    
@@ -151,6 +153,8 @@ public class TimerActivity extends ActionBarActivity implements Observer {
 	
 	public void update(Observable obj, Object arg) {
 		
+		updateTimerDisplay();
+		
         if (arg instanceof String) {
             String eventType = (String) arg;
             if (TimerLogic.TIMER_EVENT_ACTIVE_TIME_FINISHED.equals(eventType)) {
@@ -164,7 +168,6 @@ public class TimerActivity extends ActionBarActivity implements Observer {
             }
         }
         
-        updateTimerDisplay();
     }
 	
 	

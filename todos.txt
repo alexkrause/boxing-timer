@@ -1,6 +1,8 @@
 Todos:
-- 0 second rounds make the bell ring all the time
+- move all timer logic from Activity to TimerLogic
+- update of display UI thread: http://stackoverflow.com/questions/5400288/update-textview-from-thread-please-help
 - finish sound implementation based on Observer pattern
+- 0 second rounds make the bell ring all the time
 - about page (menu)
 - document the code
  rename refernces to alexfirstapp to circuitTimer

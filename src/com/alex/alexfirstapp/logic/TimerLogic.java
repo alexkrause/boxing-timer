@@ -49,9 +49,6 @@ public class TimerLogic extends Observable {
 		return halfTimeNotificationDone;
 	}
 
-	public void setHalfTimeNotificationDone(boolean halfTimeNotificationDone) {
-		this.halfTimeNotificationDone = halfTimeNotificationDone;
-	}
 
 	public TimerLogic(String minutes, String seconds, String secondsRest, String rounds) {
 
@@ -73,6 +70,9 @@ public class TimerLogic extends Observable {
 
 		if (paused) {
 			pausedSeconds = getSecondsLeft();
+		}
+		else {
+			runTimer();
 		}
 	}
 
@@ -151,13 +151,18 @@ public class TimerLogic extends Observable {
 		return false;
 	}
 
+	private void executeEvent(String eventName) {
+		notifyObservers(TIMER_EVENT_BEGIN_ROUND);
+	}
+	
+	
 	public void runTimer() {
 		
 		if (!isPaused()) {
 		
 			Executors.newSingleThreadScheduledExecutor().schedule(
 					runnable,
-					100,
+					1000,
 					TimeUnit.MILLISECONDS);
 		}
 	}
@@ -166,17 +171,20 @@ public class TimerLogic extends Observable {
 		@Override
 		public void run() {
 			
+			runTimer();
+			
 			long secondsLeft = getSecondsLeft();
+			setChanged();
 
 			if (secondsLeft <= 0) {
 				// this is the moment when we switch from rest mode to active mode
 				if (restMode) {
-					notifyObservers(TIMER_EVENT_BEGIN_ROUND);
+					executeEvent(TIMER_EVENT_BEGIN_ROUND);
 					nextRound();
 					restMode = false;
 				}
 				else {
-					notifyObservers(TIMER_EVENT_ACTIVE_TIME_FINISHED);
+					executeEvent(TIMER_EVENT_ACTIVE_TIME_FINISHED);
 		
 					// no rest phase after last round, so increase round counter here already
 					if (isLastRound()) {
@@ -188,16 +196,15 @@ public class TimerLogic extends Observable {
 			else {
 				// check for half time
 				if (getHalfTimeReached() && !halfTimeNotificationDone) {
-					notifyObservers(TIMER_EVENT_HALFTIME_REACHED);
+					executeEvent(TIMER_EVENT_HALFTIME_REACHED);
 					halfTimeNotificationDone = true;
 				}
 					
 			}
 			
-			notifyObservers(UPDATE_TIMER_DISPLAY);
+			executeEvent(UPDATE_TIMER_DISPLAY);
 			
-    	    runTimer();
-			
+    	    
 		}
 	};
 

@@ -1,7 +1,11 @@
-package com.alex.alexfirstapp;
+package com.alex.circuitTimer;
+
+import com.alex.alexfirstapp.R;
 
 import android.support.v7.app.ActionBarActivity;
 import android.support.v4.app.Fragment;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -54,10 +58,10 @@ public class MainActivity extends ActionBarActivity {
 		
 		// load last preferences
 		SharedPreferences settings = getSharedPreferences(TIMER_SETTINGS, 0);
-	    int selectedMinutesItem = Integer.valueOf(settings.getString(SELECTED_MINUTES_ITEM, "0")).intValue();
+	    int selectedMinutesItem = Integer.valueOf(settings.getString(SELECTED_MINUTES_ITEM, "1")).intValue();
 	    int selectedSecondsItem = Integer.valueOf(settings.getString(SELECTED_SECONDS_ITEM, "0")).intValue();
-	    int selectedSecondsRestItem = Integer.valueOf(settings.getString(SELECTED_SECONDS_REST_ITEM, "0")).intValue();
-	    int selectedRoundsItem = Integer.valueOf(settings.getString(SELECTED_ROUNDS_ITEM, "10")).intValue();
+	    int selectedSecondsRestItem = Integer.valueOf(settings.getString(SELECTED_SECONDS_REST_ITEM, "1")).intValue();
+	    int selectedRoundsItem = Integer.valueOf(settings.getString(SELECTED_ROUNDS_ITEM, "9")).intValue();
 	    boolean playSounds = settings.getBoolean(PLAY_SOUNDS, true);
 	    boolean playHalftimeSound = settings.getBoolean(PLAY_HALFTIME_SOUND, true);
 	    
@@ -127,6 +131,19 @@ public class MainActivity extends ActionBarActivity {
 		String rounds = (String) roundsSpinner.getItemAtPosition(roundsSpinner.getSelectedItemPosition());
 		boolean playSounds = playSoundsCheckbox.isChecked();
 		boolean playHalftimeSound = playHalftimeSoundCheckbox.isChecked();
+		
+//		if("0".equals(minutes) && "0".equals(seconds)) {
+//			AlertDialog.Builder builder = new AlertDialog.Builder(this);
+//			builder.setMessage("minimum time is 10 seconds").setTitle("validation error");
+//			builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+//				public void onClick(DialogInterface dialog, int id) {
+//					return;
+//				}
+//			});
+//			AlertDialog dialog = builder.create();
+//
+//		}
+		
 		
 		intent.putExtra(EXTRA_TIMERMINUTES, minutes);
 		intent.putExtra(EXTRA_TIMERSECONDS, seconds);

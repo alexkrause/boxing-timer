@@ -16,7 +16,7 @@
         android:configChanges="orientation"
     	android:screenOrientation="portrait" >
         <activity
-            android:name="com.alex.alexfirstapp.MainActivity"
+            android:name="com.alex.circuitTimer.MainActivity"
             android:label="@string/app_name" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -25,9 +25,9 @@
             </intent-filter>
         </activity>
         <activity
-            android:name="com.alex.alexfirstapp.TimerActivity"
+            android:name="com.alex.circuitTimer.TimerActivity"
             android:label="@string/app_name"
-            android:parentActivityName="com.alex.alexfirstapp.MainActivity"
+            android:parentActivityName="com.alex.circuitTimer.MainActivity"
             android:configChanges="orientation"
     		android:screenOrientation="portrait" >
             <meta-data

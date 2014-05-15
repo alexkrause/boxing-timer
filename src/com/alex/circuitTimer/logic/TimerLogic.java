@@ -1,4 +1,4 @@
-package com.alex.alexfirstapp.logic;
+package com.alex.circuitTimer.logic;
 
 import java.math.BigDecimal;
 import java.util.Calendar;

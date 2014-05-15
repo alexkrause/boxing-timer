@@ -10,6 +10,7 @@
     <string name="textfield_description_seconds">Seconds</string>
     <string name="textfield_hint_seconds">Seconds</string>
     <string name="textfield_hint_rounds">Rounds</string>
+    <string name="title_activity_timer">Sports Circuit Timer</string>
     <string name="label_minutes">Minutes</string>
     <string name="label_seconds">Seconds</string>
     <string name="label_seconds_rest">Seconds Rest</string>

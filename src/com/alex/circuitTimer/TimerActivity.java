@@ -1,11 +1,12 @@
-package com.alex.alexfirstapp;
+package com.alex.circuitTimer;
 
 
 
 import java.util.Observable;
 import java.util.Observer;
 
-import com.alex.alexfirstapp.logic.TimerLogic;
+import com.alex.alexfirstapp.R;
+import com.alex.circuitTimer.logic.TimerLogic;
 
 import android.support.v7.app.ActionBarActivity;
 import android.support.v4.app.Fragment;
@@ -17,7 +18,6 @@ import android.media.AudioManager.OnAudioFocusChangeListener;
 import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.os.Handler;
-import android.os.Message;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;

@@ -130,7 +130,7 @@ public class TimerActivity extends ActionBarActivity implements Observer {
 	    if (!timerLogic.isRestMode()) {
 	    	timerTextView.setTextColor(getResources().getColor(R.color.timer_green));
 	    }
-	    else {
+	    else if (timerLogic.getInitialSecondsRest() > 0) {
 	    	timerTextView.setTextColor(getResources().getColor(R.color.timer_red));
 	    }
 	    Resources res = getResources();

@@ -32,6 +32,10 @@ public class TimerLogic extends Observable {
 	public long getInitialSeconds() {
 		return initialSeconds;
 	}
+	
+	public long getInitialSecondsRest() {
+		return initialSecondsRest;
+	}
 
 	public boolean isPaused() {
 		return paused;
@@ -211,7 +215,10 @@ public class TimerLogic extends Observable {
 					restMode = false;
 				}
 				else {
-					notifyObservers(TIMER_EVENT_ACTIVE_TIME_FINISHED);
+					// only play sound when rest time is > 5 sec
+					if (initialSecondsRest > 5) {
+						notifyObservers(TIMER_EVENT_ACTIVE_TIME_FINISHED);
+					}
 		
 					// no rest phase after last round, so increase round counter here already
 					if (isLastRound()) {
@@ -237,5 +244,8 @@ public class TimerLogic extends Observable {
 			runTimer();
 		}
 	};
+
+
+	
 
 }

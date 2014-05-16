@@ -1,5 +1,4 @@
 Todos:
-- 0 second rounds make the bell ring all the time -> minimum round time = 10 seconds, Build Dialog
 - no multiple bell sound when rest time = 0
 - about page (menu)
 - document the code
@@ -16,6 +15,7 @@ Todos:
 
 
 Done
+- 0 second rounds make the bell ring all the time -> minimum round time = 10 seconds, Build Dialog
 - finish sound implementation based on Observer pattern
 - move all timer logic from Activity to TimerLogic
 - update of display UI thread: http://stackoverflow.com/questions/5400288/update-textview-from-thread-please-help

@@ -7,6 +7,7 @@
     <string name="button_caption_pause">Pause</string>
     <string name="button_caption_resume">Resume</string>
     <string name="button_caption_reset">Reset</string>
+    <string name="button_caption_ok">OK</string>
     <string name="textfield_description_seconds">Seconds</string>
     <string name="textfield_hint_seconds">Seconds</string>
     <string name="textfield_hint_rounds">Rounds</string>
@@ -18,6 +19,8 @@
     <string name="label_current_round">Round</string>
     <string name="label_checkbox_play_sounds">Play Sounds</string>
     <string name="label_checkbox_play_halftime_sound">Play Halftime Sound</string>
+    <string name="message_validation_error_min_time">Minimum time is 10 seconds</string>
+    <string name="message_validation_headline">Validation Error</string>
     
     
     <string-array name="minutes_array">

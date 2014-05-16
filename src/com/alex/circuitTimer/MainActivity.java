@@ -1,11 +1,10 @@
 package com.alex.circuitTimer;
 
 import com.alex.alexfirstapp.R;
+import com.alex.circuitTimer.ui.TimerSettingsValidationErrorFragment;
 
 import android.support.v7.app.ActionBarActivity;
 import android.support.v4.app.Fragment;
-import android.app.AlertDialog;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -132,17 +131,11 @@ public class MainActivity extends ActionBarActivity {
 		boolean playSounds = playSoundsCheckbox.isChecked();
 		boolean playHalftimeSound = playHalftimeSoundCheckbox.isChecked();
 		
-//		if("0".equals(minutes) && "0".equals(seconds)) {
-//			AlertDialog.Builder builder = new AlertDialog.Builder(this);
-//			builder.setMessage("minimum time is 10 seconds").setTitle("validation error");
-//			builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
-//				public void onClick(DialogInterface dialog, int id) {
-//					return;
-//				}
-//			});
-//			AlertDialog dialog = builder.create();
-//
-//		}
+		if("0".equals(minutes) && "0".equals(seconds)) {
+			TimerSettingsValidationErrorFragment alert = new TimerSettingsValidationErrorFragment();
+			alert.show(getSupportFragmentManager(), "validation dialog");
+			return;
+		}
 		
 		
 		intent.putExtra(EXTRA_TIMERMINUTES, minutes);

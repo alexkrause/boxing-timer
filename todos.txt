@@ -1,5 +1,4 @@
 Todos:
-- no multiple bell sound when rest time = 0
 - about page (menu)
 - document the code
  rename refernces to alexfirstapp to circuitTimer
@@ -15,6 +14,8 @@ Todos:
 
 
 Done
+- exit menu item
+- no multiple bell sound when rest time = 0
 - 0 second rounds make the bell ring all the time -> minimum round time = 10 seconds, Build Dialog
 - finish sound implementation based on Observer pattern
 - move all timer logic from Activity to TimerLogic

@@ -1,6 +1,7 @@
 Todos:
 - exit menu item
 - document the code
+- splash screen
 - write unit Tests for logic class
 - other sound for half time buzzer
 - licensed soundfiles

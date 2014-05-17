@@ -1,4 +1,5 @@
 Todos:
+- rest minutes
 - exit menu item
 - document the code
 - splash screen

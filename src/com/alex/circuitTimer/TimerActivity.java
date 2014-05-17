@@ -29,7 +29,7 @@ import android.widget.TextView;
 
 public class TimerActivity extends ActionBarActivity implements Observer {
 
-	private static final int SCREEN_UPDATE_INTERVAL = 200;
+	private static final int SCREEN_UPDATE_INTERVAL = 100;
 	private TimerLogic timerLogic = null;
 	private TextView timerTextView;
 	private TextView roundsTextView;
@@ -71,12 +71,13 @@ public class TimerActivity extends ActionBarActivity implements Observer {
 		Intent intent = getIntent();
 		String minutes = intent.getStringExtra(MainActivity.EXTRA_TIMERMINUTES);
 		String seconds = intent.getStringExtra(MainActivity.EXTRA_TIMERSECONDS);
+		String minutesRest = intent.getStringExtra(MainActivity.EXTRA_TIMERMINUTES_REST);
 		String secondsRest = intent.getStringExtra(MainActivity.EXTRA_TIMERSECONDS_REST);
 		String rounds = intent.getStringExtra(MainActivity.EXTRA_ROUNDS);
 		playSounds = intent.getBooleanExtra(MainActivity.EXTRA_PLAYSOUNDS, true);
 		playHalftimeSounds = intent.getBooleanExtra(MainActivity.EXTRA_PLAYHALFTIMESOUND, true);
 
-		timerLogic = new TimerLogic(minutes, seconds, secondsRest, rounds);
+		timerLogic = new TimerLogic(minutes, seconds, minutesRest, secondsRest, rounds);
 		updateTimerDisplay();
 		playSound(R.raw.boxing_bell);
 		timerLogic.addObserver(this);

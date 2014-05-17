@@ -20,22 +20,25 @@ import android.widget.Spinner;
 
 public class MainActivity extends ActionBarActivity {
 	
-	private static final String SELECTED_SECONDS_REST_ITEM = "selectedRestSeconds";
     private static final String SELECTED_SECONDS_ITEM = "selectedSeconds";
 	private static final String SELECTED_MINUTES_ITEM = "selectedMinutes";
+	private static final String SELECTED_SECONDS_REST_ITEM = "selectedRestSeconds";
+	private static final String SELECTED_MINUTES_REST_ITEM = "selectedRestMinutes";
 	private static final String SELECTED_ROUNDS_ITEM = "selectedRounds";
 	private static final String PLAY_SOUNDS = "playSounds";
 	private static final String PLAY_HALFTIME_SOUND = "playHalftimeSound";
-	public final static String EXTRA_TIMERSECONDS_REST = "com.alex.alexfirstapp.SECONDS_REST";
-	public final static String EXTRA_TIMERSECONDS = "com.alex.alexfirstapp.SECONDS";
-    public final static String EXTRA_TIMERMINUTES = "com.alex.alexfirstapp.MINUTES";
-    public final static String EXTRA_ROUNDS = "com.alex.alexfirstapp.ROUNDS";
-    public final static String EXTRA_PLAYSOUNDS = "com.alex.alexfirstapp.PLAYSOUNDS";
-    public final static String EXTRA_PLAYHALFTIMESOUND = "com.alex.alexfirstapp.PLAYHALFTIMESOUND";
+	public final static String EXTRA_TIMERSECONDS_REST = "com.alex.circuitTimer.SECONDS_REST";
+	public final static String EXTRA_TIMERSECONDS = "com.alex.circuitTimer.SECONDS";
+    public final static String EXTRA_TIMERMINUTES_REST = "com.alex.circuitTimer.MINUTES_REST";
+    public final static String EXTRA_TIMERMINUTES = "com.alex.circuitTimer.MINUTES";
+    public final static String EXTRA_ROUNDS = "com.alex.circuitTimer.ROUNDS";
+    public final static String EXTRA_PLAYSOUNDS = "com.alex.circuitTimer.PLAYSOUNDS";
+    public final static String EXTRA_PLAYHALFTIMESOUND = "com.alex.circuitTimer.PLAYHALFTIMESOUND";
 
     private static final String TIMER_SETTINGS = "timerSettings";
     private Spinner minutesSpinner;
     private Spinner secondsSpinner;
+    private Spinner minutesRestSpinner;
     private Spinner secondsRestSpinner;
     private Spinner roundsSpinner;
     private CheckBox playSoundsCheckbox;
@@ -60,6 +63,7 @@ public class MainActivity extends ActionBarActivity {
 		SharedPreferences settings = getSharedPreferences(TIMER_SETTINGS, 0);
 	    int selectedMinutesItem = Integer.valueOf(settings.getString(SELECTED_MINUTES_ITEM, "1")).intValue();
 	    int selectedSecondsItem = Integer.valueOf(settings.getString(SELECTED_SECONDS_ITEM, "0")).intValue();
+	    int selectedMinutesRestItem = Integer.valueOf(settings.getString(SELECTED_MINUTES_REST_ITEM, "1")).intValue();
 	    int selectedSecondsRestItem = Integer.valueOf(settings.getString(SELECTED_SECONDS_REST_ITEM, "1")).intValue();
 	    int selectedRoundsItem = Integer.valueOf(settings.getString(SELECTED_ROUNDS_ITEM, "9")).intValue();
 	    boolean playSounds = settings.getBoolean(PLAY_SOUNDS, true);
@@ -77,6 +81,12 @@ public class MainActivity extends ActionBarActivity {
 		adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 		secondsSpinner.setAdapter(adapter);
 		secondsSpinner.setSelection(selectedSecondsItem);
+		
+		minutesRestSpinner = (Spinner) findViewById(R.id.minutes_spinner_rest);
+		adapter = ArrayAdapter.createFromResource(this, R.array.minutes_array, android.R.layout.simple_spinner_item);
+		adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+		minutesRestSpinner.setAdapter(adapter);
+		minutesRestSpinner.setSelection(selectedMinutesRestItem);
 		
 		secondsRestSpinner = (Spinner) findViewById(R.id.seconds_rest_spinner);
 		adapter = ArrayAdapter.createFromResource(this, R.array.seconds_array, android.R.layout.simple_spinner_item);
@@ -119,6 +129,7 @@ public class MainActivity extends ActionBarActivity {
 		
 		String minutes = (String) minutesSpinner.getItemAtPosition(minutesSpinner.getSelectedItemPosition());
 		String seconds = (String) secondsSpinner.getItemAtPosition(secondsSpinner.getSelectedItemPosition());
+		String minutesRest = (String) minutesRestSpinner.getItemAtPosition(minutesRestSpinner.getSelectedItemPosition());
 		String secondsRest = (String) secondsRestSpinner.getItemAtPosition(secondsRestSpinner.getSelectedItemPosition());
 		String rounds = (String) roundsSpinner.getItemAtPosition(roundsSpinner.getSelectedItemPosition());
 		boolean playSounds = playSoundsCheckbox.isChecked();
@@ -130,9 +141,9 @@ public class MainActivity extends ActionBarActivity {
 			return;
 		}
 		
-		
 		intent.putExtra(EXTRA_TIMERMINUTES, minutes);
 		intent.putExtra(EXTRA_TIMERSECONDS, seconds);
+		intent.putExtra(EXTRA_TIMERMINUTES_REST, minutesRest);
 		intent.putExtra(EXTRA_TIMERSECONDS_REST, secondsRest);
 		intent.putExtra(EXTRA_ROUNDS, rounds);
 		intent.putExtra(EXTRA_PLAYSOUNDS, playSounds);
@@ -150,6 +161,7 @@ public class MainActivity extends ActionBarActivity {
 	    SharedPreferences.Editor editor = settings.edit();
 	    editor.putString(SELECTED_MINUTES_ITEM, Integer.toString(minutesSpinner.getSelectedItemPosition()));
 	    editor.putString(SELECTED_SECONDS_ITEM, Integer.toString(secondsSpinner.getSelectedItemPosition()));
+	    editor.putString(SELECTED_MINUTES_REST_ITEM, Integer.toString(minutesRestSpinner.getSelectedItemPosition()));
 	    editor.putString(SELECTED_SECONDS_REST_ITEM, Integer.toString(secondsRestSpinner.getSelectedItemPosition()));
 	    editor.putString(SELECTED_ROUNDS_ITEM, Integer.toString(roundsSpinner.getSelectedItemPosition()));
 	    editor.putBoolean(PLAY_SOUNDS, playSoundsCheckbox.isChecked());

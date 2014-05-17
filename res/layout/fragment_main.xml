@@ -36,10 +36,23 @@
         android:layout_below="@+id/label_seconds" />
     
     <TextView
-        android:id="@+id/label_seconds_rest"
+        android:id="@+id/label_minutes_rest"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@+id/seconds_spinner"
+        android:text="@string/label_minutes_rest" />
+
+    <Spinner
+        android:id="@+id/minutes_spinner_rest"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/label_minutes_rest" />
+    
+    <TextView
+        android:id="@+id/label_seconds_rest"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/minutes_spinner_rest"
         android:text="@string/label_seconds_rest" />
 
     <Spinner

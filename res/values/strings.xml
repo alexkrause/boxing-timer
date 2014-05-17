@@ -16,6 +16,7 @@
     <string name="title_activity_timer">Sports Circuit Timer</string>
     <string name="label_minutes">Minutes</string>
     <string name="label_seconds">Seconds</string>
+    <string name="label_minutes_rest">Minutes Rest</string>
     <string name="label_seconds_rest">Seconds Rest</string>
     <string name="label_rounds">Rounds</string>
     <string name="label_current_round">Round</string>
@@ -49,6 +50,11 @@
         <item>8</item>
         <item>9</item>
         <item>10</item>
+        <item>11</item>
+        <item>12</item>
+        <item>13</item>
+        <item>14</item>
+        <item>15</item>
     </string-array>
     <string-array name="seconds_array">
         <item>0</item>
@@ -84,6 +90,26 @@
         <item>18</item>
         <item>19</item>
         <item>20</item>
+        <item>21</item>
+        <item>22</item>
+        <item>23</item>
+        <item>24</item>
+        <item>25</item>
+        <item>26</item>
+        <item>27</item>
+        <item>28</item>
+        <item>29</item>
+        <item>30</item>
+        <item>31</item>
+        <item>32</item>
+        <item>33</item>
+        <item>34</item>
+        <item>35</item>
+        <item>36</item>
+        <item>37</item>
+        <item>38</item>
+        <item>39</item>
+        <item>40</item>
     </string-array>
 
     

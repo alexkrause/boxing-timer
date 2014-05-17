@@ -9,6 +9,7 @@ import java.util.concurrent.TimeUnit;
 
 public class TimerLogic extends Observable {
 
+	private static final int TIMER_UPDATE_INTERVAL = 100;
 	public static final String TIMER_EVENT_BEGIN_ROUND = "beginRound";
 	public static final String TIMER_EVENT_ACTIVE_TIME_FINISHED = "activeTimeFinished";
 	public static final String TIMER_EVENT_HALFTIME_REACHED = "halfTimeReached";
@@ -54,14 +55,16 @@ public class TimerLogic extends Observable {
 	 * @param secondsRest Duration of rest period
 	 * @param rounds Number of rounds
 	 */
-	public TimerLogic(String minutes, String seconds, String secondsRest, String rounds) {
+	public TimerLogic(String minutes, String seconds, String minutesRest, String secondsRest, String rounds) {
 
 		long minutesLong = Long.valueOf(minutes);
 		long secondsLong = Long.valueOf(seconds);
-		initialSecondsRest = Long.valueOf(secondsRest);
+		long minutesRestLong = Long.valueOf(minutesRest);
+		long secondsRestLong = Long.valueOf(secondsRest);
 		maxRounds = Long.valueOf(rounds);
 
 		initialSeconds = minutesLong * 60 + secondsLong;
+		initialSecondsRest = minutesRestLong * 60 + secondsRestLong;
 		timerStarted = new Date();
 		halfTimeNotificationDone = false;
 		restMode = false;
@@ -195,7 +198,7 @@ public class TimerLogic extends Observable {
 		
 			Executors.newSingleThreadScheduledExecutor().schedule(
 					runnable,
-					200,
+					TIMER_UPDATE_INTERVAL,
 					TimeUnit.MILLISECONDS);
 		}
 	}

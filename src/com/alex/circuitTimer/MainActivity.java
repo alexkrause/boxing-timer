@@ -1,6 +1,7 @@
 package com.alex.circuitTimer;
 
-import com.alex.alexfirstapp.R;
+import com.alex.circuitTimer.R;
+import com.alex.circuitTimer.ui.MainMenuLogic;
 import com.alex.circuitTimer.ui.TimerSettingsValidationErrorFragment;
 
 import android.support.v7.app.ActionBarActivity;
@@ -108,18 +109,9 @@ public class MainActivity extends ActionBarActivity {
 
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
-		// Handle action bar item clicks here. The action bar will
-		// automatically handle clicks on the Home/Up button, so long
-		// as you specify a parent activity in AndroidManifest.xml.
-		int id = item.getItemId();
-		if (id == R.id.action_exit) {
-			finish();
-			return true;
-		}
+		MainMenuLogic.processMenuSelection(item, this);
 		return super.onOptionsItemSelected(item);
 	}
-	
-	
 	
 	/** Called when the user clicks the start button */
 	public void startTimer(View view) {

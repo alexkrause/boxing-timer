@@ -5,8 +5,9 @@ package com.alex.circuitTimer;
 import java.util.Observable;
 import java.util.Observer;
 
-import com.alex.alexfirstapp.R;
+import com.alex.circuitTimer.R;
 import com.alex.circuitTimer.logic.TimerLogic;
+import com.alex.circuitTimer.ui.MainMenuLogic;
 
 import android.support.v7.app.ActionBarActivity;
 import android.support.v4.app.Fragment;
@@ -204,7 +205,6 @@ public class TimerActivity extends ActionBarActivity implements Observer {
     
     
     /* here comes the boilerplate code */
-    
     @Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 
@@ -218,11 +218,7 @@ public class TimerActivity extends ActionBarActivity implements Observer {
 		// Handle action bar item clicks here. The action bar will
 		// automatically handle clicks on the Home/Up button, so long
 		// as you specify a parent activity in AndroidManifest.xml.
-		int id = item.getItemId();
-		if (id == R.id.action_exit) {
-			finish();
-			return true;
-		}
+		MainMenuLogic.processMenuSelection(item, this);
 		return super.onOptionsItemSelected(item);
 	}
 

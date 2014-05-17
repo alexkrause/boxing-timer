@@ -1,7 +1,6 @@
 Todos:
-- about page (menu)
+- exit menu item
 - document the code
- rename refernces to alexfirstapp to circuitTimer
 - write unit Tests for logic class
 - other sound for half time buzzer
 - licensed soundfiles
@@ -14,7 +13,9 @@ Todos:
 
 
 Done
-- exit menu item
+- rename refernces to alexfirstapp to circuitTimer
+- extract menu logic to separate class in order to avoid duplicate code
+- about page (menu)
 - no multiple bell sound when rest time = 0
 - 0 second rounds make the bell ring all the time -> minimum round time = 10 seconds, Build Dialog
 - finish sound implementation based on Observer pattern

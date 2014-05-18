@@ -1,5 +1,4 @@
 Todos:
-- round x of y
 - 5sec 	countdown before start
 - toggle halftime checkbox when play sounds is unchecked
 - optimize app name
@@ -15,6 +14,7 @@ Todos:
 
 
 Done
+- round x of y
 - test app on low res device
 - Bug! Timer stops after 5 rounds
 - rest minutes

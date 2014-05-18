@@ -36,6 +36,8 @@ public class TimerActivity extends ActionBarActivity implements Observer {
     private boolean playSounds = true;
     private boolean playHalftimeSounds = true;
     private Handler handler = new Handler();
+    private long secondsLeft = 0;
+    private String eventType;
     
     OnAudioFocusChangeListener afChangeListener = new OnAudioFocusChangeListener() {
 	    public void onAudioFocusChange(int focusChange) {
@@ -126,7 +128,7 @@ public class TimerActivity extends ActionBarActivity implements Observer {
 	 * repaint the timer screen: remaining time, color of remaining time, round counter
 	 */
 	private void updateTimerDisplay() {
-		long secondsLeft = timerLogic.getSecondsLeft();
+		secondsLeft = timerLogic.getSecondsLeft();
 	    timerTextView.setText(String.format("%02d", secondsLeft / 60) + ":" + String.format("%02d", secondsLeft%60));
 	    
 	    if (!timerLogic.isRestMode()) {
@@ -135,9 +137,7 @@ public class TimerActivity extends ActionBarActivity implements Observer {
 	    else if (timerLogic.getInitialSecondsRest() > 0) {
 	    	timerTextView.setTextColor(getResources().getColor(R.color.timer_red));
 	    }
-	    Resources res = getResources();
-	    String currentRound = res.getString(R.string.label_current_round) + " " + Long.valueOf(timerLogic.getCurrentRoundForDisplay());
-		roundsTextView.setText(currentRound);
+		roundsTextView.setText(getResources().getString(R.string.label_current_round) + " " + Long.valueOf(timerLogic.getCurrentRoundForDisplay())+"/"+Long.valueOf(timerLogic.getMaxRounds()));
 	}
 	
 	
@@ -164,6 +164,8 @@ public class TimerActivity extends ActionBarActivity implements Observer {
 			MediaPlayer mediaPlayer = MediaPlayer.create(this, soundId);
 			mediaPlayer.start();
 			am.abandonAudioFocus(afChangeListener);
+			mediaPlayer.stop();
+			mediaPlayer.release();
 		}
 		
 		
@@ -172,7 +174,7 @@ public class TimerActivity extends ActionBarActivity implements Observer {
 	public void update(Observable obj, Object arg) {
 		
         if (arg instanceof String) {
-            String eventType = (String) arg;
+            eventType = (String) arg;
             if (TimerLogic.TIMER_EVENT_ACTIVE_TIME_FINISHED.equals(eventType)) {
             	playSound(R.raw.boxing_bell_multiple);
             }

@@ -1,20 +1,26 @@
 Todos:
-- rest minutes
-- exit menu item
+- round x of y
+- 5sec 	countdown before start
+- toggle halftime checkbox when play sounds is unchecked
+- optimize app name
+-- sports interval timer
+-- sports circuit timer
+- exit menu item - name it "back" on timer screen
 - document the code
-- splash screen
 - write unit Tests for logic class
 - other sound for half time buzzer
 - licensed soundfiles
-- dark background
-- nice background image
-- nice app icon
-	-- mickey maus hand mit uhr
 - change colour when nearly finished
 - change colour during rest time
 
 
 Done
+- test app on low res device
+- Bug! Timer stops after 5 rounds
+- rest minutes
+- nice background image
+- nice app icon
+- dark background
 - rename refernces to alexfirstapp to circuitTimer
 - extract menu logic to separate class in order to avoid duplicate code
 - about page (menu)

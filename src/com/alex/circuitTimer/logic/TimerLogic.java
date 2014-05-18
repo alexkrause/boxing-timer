@@ -5,6 +5,7 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.Observable;
 import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 
 public class TimerLogic extends Observable {
@@ -22,9 +23,25 @@ public class TimerLogic extends Observable {
 	private long currentRound = 1;
 	private boolean paused = false;
 	private boolean restMode = false;
+	
+	// helper instance variables for memory saving
+	// when these variables had method scope the timer app
+	// would crash after 5 rounds due to an out of memory Exception on an HTC One Mini
+	long currentSeconds = 0;
+	long startedSeconds = 0;
+	long secondsBase = 0;
+	long secondsLeft = 0;
+	int pausedSecondsInt = 0;
+	
+	// Thred executer for update timer thread
+	ScheduledExecutorService threadExecuter;
 
 	Date timerStarted;
 
+
+	public long getMaxRounds() {
+		return maxRounds;
+	}
 
 	public boolean isRestMode() {
 		return restMode;
@@ -68,6 +85,7 @@ public class TimerLogic extends Observable {
 		timerStarted = new Date();
 		halfTimeNotificationDone = false;
 		restMode = false;
+		threadExecuter = Executors.newSingleThreadScheduledExecutor();
 	}
 
 	/**
@@ -134,10 +152,10 @@ public class TimerLogic extends Observable {
 	public void resumeTimer() {
 		Calendar cal = Calendar.getInstance();
 		cal.setTime(new Date());
-		long secondsBase = getSecondsBase();
+		secondsBase = getSecondsBase();
 
 		// calculate new start time
-		int pausedSecondsInt = (new BigDecimal(secondsBase - pausedSeconds)).intValue();
+		pausedSecondsInt = (new BigDecimal(secondsBase - pausedSeconds)).intValue();
 		cal.add(Calendar.SECOND, pausedSecondsInt * (-1));
 		timerStarted = cal.getTime();
 
@@ -152,12 +170,12 @@ public class TimerLogic extends Observable {
 	 */
 	public long getSecondsLeft() {
 
-		long currentSeconds = (new Date()).getTime() / 1000;
-		long startedSeconds = timerStarted.getTime() / 1000;
-		long secondsBase = getSecondsBase();
+		currentSeconds = (new Date()).getTime() / 1000;
+		startedSeconds = timerStarted.getTime() / 1000;
+		secondsBase = getSecondsBase();
 		
 		// subtract one seconds for smoothening out the displaying of seconds
-		long secondsLeft = secondsBase - (currentSeconds - startedSeconds  -1);
+		secondsLeft = secondsBase - (currentSeconds - startedSeconds);
 		if (secondsLeft < 0) {
 			return 0;
 		}
@@ -196,7 +214,7 @@ public class TimerLogic extends Observable {
 		
 		if (!paused && !isTimerFinished()) {
 		
-			Executors.newSingleThreadScheduledExecutor().schedule(
+			threadExecuter.schedule(
 					runnable,
 					TIMER_UPDATE_INTERVAL,
 					TimeUnit.MILLISECONDS);
@@ -207,7 +225,7 @@ public class TimerLogic extends Observable {
 		@Override
 		public void run() {
 			
-			long secondsLeft = getSecondsLeft();
+			secondsLeft = getSecondsLeft();
 			setChanged();
 
 			if (secondsLeft <= 0) {

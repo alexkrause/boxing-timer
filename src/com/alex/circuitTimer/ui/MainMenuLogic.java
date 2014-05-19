@@ -12,7 +12,7 @@ public class MainMenuLogic {
 			// automatically handle clicks on the Home/Up button, so long
 			// as you specify a parent activity in AndroidManifest.xml.
 			int id = item.getItemId();
-			if (id == R.id.action_exit) {
+			if (id == R.id.action_exit || id == R.id.action_settings) {
 				currentActivity.finish();
 			}
 			if (id == R.id.action_about) {

@@ -1,19 +1,19 @@
 Todos:
-- 5sec 	countdown before start
+- other sound for half time buzzer
+- countdown sounds
+- 2 sound profiles (boxing bell & other)
+- licensed soundfiles
 - toggle halftime checkbox when play sounds is unchecked
-- optimize app name
--- sports interval timer
--- sports circuit timer
-- exit menu item - name it "back" on timer screen
 - document the code
 - write unit Tests for logic class
-- other sound for half time buzzer
-- licensed soundfiles
-- change colour when nearly finished
-- change colour during rest time
 
 
-Done
+
+DONE
+- exit menu item - name it "back" on timer screen
+- optimize app name
+- use system sound volume for playback
+- 5sec 	countdown before start
 - round x of y
 - test app on low res device
 - Bug! Timer stops after 5 rounds

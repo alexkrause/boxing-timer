@@ -11,6 +11,7 @@ import java.util.concurrent.TimeUnit;
 public class TimerLogic extends Observable {
 
 	private static final int TIMER_UPDATE_INTERVAL = 100;
+	private static final int COUNTDOUW_SECONDS = 5;
 	public static final String TIMER_EVENT_BEGIN_ROUND = "beginRound";
 	public static final String TIMER_EVENT_ACTIVE_TIME_FINISHED = "activeTimeFinished";
 	public static final String TIMER_EVENT_HALFTIME_REACHED = "halfTimeReached";
@@ -20,7 +21,7 @@ public class TimerLogic extends Observable {
 	private long initialSecondsRest = 10;
 	private long pausedSeconds = 0;
 	private long maxRounds = 1;
-	private long currentRound = 1;
+	private long currentRound = 0;
 	private boolean paused = false;
 	private boolean restMode = false;
 	
@@ -39,6 +40,10 @@ public class TimerLogic extends Observable {
 	Date timerStarted;
 
 
+	public long getCurrentRound() {
+		return currentRound;
+	}
+	
 	public long getMaxRounds() {
 		return maxRounds;
 	}
@@ -94,7 +99,7 @@ public class TimerLogic extends Observable {
 	public void resetTimer() {
 		timerStarted = new Date();
 		restMode = false;
-		currentRound = 1;
+		currentRound = 0;
 
 		if (paused) {
 			pausedSeconds = getSecondsLeft();
@@ -122,6 +127,7 @@ public class TimerLogic extends Observable {
 		if (currentRound <= maxRounds) {
 			currentRound++;
 		}
+		notifyObservers(TIMER_EVENT_BEGIN_ROUND);
 	}
 
 	public boolean isTimerFinished() {
@@ -189,6 +195,10 @@ public class TimerLogic extends Observable {
 	 * @return Number of seconds to start with. Either initial active time or initial rest time.
 	 */
 	private long getSecondsBase() {
+		if (currentRound == 0) {
+			return COUNTDOUW_SECONDS;
+		}
+		
 		if (restMode) {
 			return initialSecondsRest;
 		}
@@ -227,22 +237,23 @@ public class TimerLogic extends Observable {
 			
 			secondsLeft = getSecondsLeft();
 			setChanged();
+			
+			// countdown before workout begin
 
 			if (secondsLeft <= 0) {
 				// this is the moment when we switch from rest mode to active mode
 				if (restMode) {
-					notifyObservers(TIMER_EVENT_BEGIN_ROUND);
 					nextRound();
 					restMode = false;
 				}
 				else {
 					// only play sound when rest time is > 5 sec
-					if (initialSecondsRest > 5) {
+					if (currentRound > 0 && initialSecondsRest > 5) {
 						notifyObservers(TIMER_EVENT_ACTIVE_TIME_FINISHED);
 					}
 		
-					// no rest phase after last round, so increase round counter here already
-					if (isLastRound()) {
+					// no rest phase after last round and after countdown, so increase round counter here already
+					if (isLastRound() || currentRound == 0) {
 						nextRound();
 					}
 					else {

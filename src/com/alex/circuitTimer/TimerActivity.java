@@ -38,6 +38,7 @@ public class TimerActivity extends ActionBarActivity implements Observer {
     private Handler handler = new Handler();
     private long secondsLeft = 0;
     private String eventType;
+    private String roundDisplay;
     
     OnAudioFocusChangeListener afChangeListener = new OnAudioFocusChangeListener() {
 	    public void onAudioFocusChange(int focusChange) {
@@ -56,6 +57,7 @@ public class TimerActivity extends ActionBarActivity implements Observer {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_timer);
+		setVolumeControlStream(AudioManager.STREAM_NOTIFICATION);
 		
 		if (savedInstanceState == null) {
 			getSupportFragmentManager().beginTransaction()
@@ -81,7 +83,6 @@ public class TimerActivity extends ActionBarActivity implements Observer {
 
 		timerLogic = new TimerLogic(minutes, seconds, minutesRest, secondsRest, rounds);
 		updateTimerDisplay();
-		playSound(R.raw.boxing_bell);
 		timerLogic.addObserver(this);
 		timerLogic.runTimer();
 		handler.postDelayed(updateTimerRunner, SCREEN_UPDATE_INTERVAL);
@@ -131,13 +132,29 @@ public class TimerActivity extends ActionBarActivity implements Observer {
 		secondsLeft = timerLogic.getSecondsLeft();
 	    timerTextView.setText(String.format("%02d", secondsLeft / 60) + ":" + String.format("%02d", secondsLeft%60));
 	    
-	    if (!timerLogic.isRestMode()) {
+	    if (timerLogic.getCurrentRound() == 0) {
+	    	timerTextView.setTextColor(getResources().getColor(R.color.timer_grey));
+	    }
+	    else if (!timerLogic.isRestMode() ) {
 	    	timerTextView.setTextColor(getResources().getColor(R.color.timer_green));
 	    }
 	    else if (timerLogic.getInitialSecondsRest() > 0) {
 	    	timerTextView.setTextColor(getResources().getColor(R.color.timer_red));
 	    }
-		roundsTextView.setText(getResources().getString(R.string.label_current_round) + " " + Long.valueOf(timerLogic.getCurrentRoundForDisplay())+"/"+Long.valueOf(timerLogic.getMaxRounds()));
+	    
+	    // show round display depending on mode (countdown, round, rest)
+	    if (timerLogic.getCurrentRound() > 0) {
+	    	if (timerLogic.isRestMode()) {
+	    		roundDisplay = getResources().getString(R.string.label_rest);
+	    	}
+	    	else {
+	    		roundDisplay = getResources().getString(R.string.label_current_round);
+	    	}
+	    	roundsTextView.setText(roundDisplay + " " + Long.valueOf(timerLogic.getCurrentRoundForDisplay())+"/"+Long.valueOf(timerLogic.getMaxRounds()));
+	    }
+	    else {
+	    	roundsTextView.setText(R.string.label_countdown);
+	    }
 	}
 	
 	
@@ -164,8 +181,6 @@ public class TimerActivity extends ActionBarActivity implements Observer {
 			MediaPlayer mediaPlayer = MediaPlayer.create(this, soundId);
 			mediaPlayer.start();
 			am.abandonAudioFocus(afChangeListener);
-			mediaPlayer.stop();
-			mediaPlayer.release();
 		}
 		
 		
@@ -212,7 +227,7 @@ public class TimerActivity extends ActionBarActivity implements Observer {
 	public boolean onCreateOptionsMenu(Menu menu) {
 
 		// Inflate the menu; this adds items to the action bar if it is present.
-		getMenuInflater().inflate(R.menu.main, menu);
+		getMenuInflater().inflate(R.menu.timer, menu);
 		return true;
 	}
 

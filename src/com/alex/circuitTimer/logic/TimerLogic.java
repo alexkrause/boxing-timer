@@ -211,7 +211,7 @@ public class TimerLogic extends Observable {
 	 */
 	public boolean getHalfTimeReached() {
 
-		if (!restMode && getSecondsLeft() <= initialSeconds / 2) {
+		if (currentRound!= 0 && !restMode && getSecondsLeft() <= initialSeconds / 2) {
 			return true;
 		}
 

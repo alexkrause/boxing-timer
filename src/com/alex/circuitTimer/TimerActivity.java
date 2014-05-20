@@ -197,7 +197,7 @@ public class TimerActivity extends ActionBarActivity implements Observer {
             	playSound(R.raw.boxing_bell);
             }
             else if(TimerLogic.TIMER_EVENT_HALFTIME_REACHED.equals(eventType) && playHalftimeSounds) {
-            	playSound(R.raw.boxing_bell);
+            	playSound(R.raw.halftime_bell);
             }
         }
         

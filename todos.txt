@@ -1,8 +1,7 @@
 Todos:
-- other sound for half time buzzer
+- remember state when app is moved to the background and brought to the front again
 - countdown sounds
 - 2 sound profiles (boxing bell & other)
-- licensed soundfiles
 - toggle halftime checkbox when play sounds is unchecked
 - document the code
 - write unit Tests for logic class
@@ -10,6 +9,8 @@ Todos:
 
 
 DONE
+- licensed soundfiles
+- other sound for half time buzzer
 - exit menu item - name it "back" on timer screen
 - optimize app name
 - use system sound volume for playback

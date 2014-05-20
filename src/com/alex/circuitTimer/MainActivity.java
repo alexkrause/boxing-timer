@@ -35,6 +35,7 @@ public class MainActivity extends ActionBarActivity {
     public final static String EXTRA_PLAYSOUNDS = "com.alex.circuitTimer.PLAYSOUNDS";
     public final static String EXTRA_PLAYHALFTIMESOUND = "com.alex.circuitTimer.PLAYHALFTIMESOUND";
 
+    private Intent timerIntent = null;
     private static final String TIMER_SETTINGS = "timerSettings";
     private Spinner minutesSpinner;
     private Spinner secondsSpinner;
@@ -125,7 +126,11 @@ public class MainActivity extends ActionBarActivity {
 	
 	/** Called when the user clicks the start button */
 	public void startTimer(View view) {
-		Intent intent = new Intent(this, TimerActivity.class);
+		
+		// only start a new Activity in case it's null
+		if (timerIntent == null) {
+			timerIntent = new Intent(this, TimerActivity.class);
+		}
 		
 		String minutes = (String) minutesSpinner.getItemAtPosition(minutesSpinner.getSelectedItemPosition());
 		String seconds = (String) secondsSpinner.getItemAtPosition(secondsSpinner.getSelectedItemPosition());
@@ -141,15 +146,15 @@ public class MainActivity extends ActionBarActivity {
 			return;
 		}
 		
-		intent.putExtra(EXTRA_TIMERMINUTES, minutes);
-		intent.putExtra(EXTRA_TIMERSECONDS, seconds);
-		intent.putExtra(EXTRA_TIMERMINUTES_REST, minutesRest);
-		intent.putExtra(EXTRA_TIMERSECONDS_REST, secondsRest);
-		intent.putExtra(EXTRA_ROUNDS, rounds);
-		intent.putExtra(EXTRA_PLAYSOUNDS, playSounds);
-		intent.putExtra(EXTRA_PLAYHALFTIMESOUND, playHalftimeSound);
+		timerIntent.putExtra(EXTRA_TIMERMINUTES, minutes);
+		timerIntent.putExtra(EXTRA_TIMERSECONDS, seconds);
+		timerIntent.putExtra(EXTRA_TIMERMINUTES_REST, minutesRest);
+		timerIntent.putExtra(EXTRA_TIMERSECONDS_REST, secondsRest);
+		timerIntent.putExtra(EXTRA_ROUNDS, rounds);
+		timerIntent.putExtra(EXTRA_PLAYSOUNDS, playSounds);
+		timerIntent.putExtra(EXTRA_PLAYHALFTIMESOUND, playHalftimeSound);
 		
-		startActivity(intent);
+		startActivity(timerIntent);
 	}
 	
 	@Override

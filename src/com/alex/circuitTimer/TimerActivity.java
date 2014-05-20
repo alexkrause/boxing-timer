@@ -81,9 +81,12 @@ public class TimerActivity extends ActionBarActivity implements Observer {
 		playSounds = intent.getBooleanExtra(MainActivity.EXTRA_PLAYSOUNDS, true);
 		playHalftimeSounds = intent.getBooleanExtra(MainActivity.EXTRA_PLAYHALFTIMESOUND, true);
 
-		timerLogic = new TimerLogic(minutes, seconds, minutesRest, secondsRest, rounds);
+		if (timerLogic == null) {
+			timerLogic = new TimerLogic(minutes, seconds, minutesRest, secondsRest, rounds);
+			timerLogic.addObserver(this);
+		}
 		updateTimerDisplay();
-		timerLogic.addObserver(this);
+		
 		timerLogic.runTimer();
 		handler.postDelayed(updateTimerRunner, SCREEN_UPDATE_INTERVAL);
 	}
@@ -207,7 +210,16 @@ public class TimerActivity extends ActionBarActivity implements Observer {
     @Override
     public void onPause() {
     	super.onPause();
-    	timerLogic.pauseTimer();
+    	handler.removeCallbacks(updateTimerRunner);
+    }
+    
+    @Override
+    public void finish() {
+    	if (timerLogic != null) {
+    		timerLogic.pauseTimer();
+    		timerLogic = null;
+    	}
+    	super.finish();
     	handler.removeCallbacks(updateTimerRunner);
     }	
     

@@ -28,11 +28,7 @@
             android:name="com.alex.circuitTimer.TimerActivity"
             android:configChanges="orientation"
             android:label="@string/app_name"
-            android:parentActivityName="com.alex.circuitTimer.MainActivity"
             android:screenOrientation="portrait" >
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.alex.alexfirstapp.MainActivity" />
         </activity>
     </application>
 

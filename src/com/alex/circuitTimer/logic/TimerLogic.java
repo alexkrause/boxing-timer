@@ -176,7 +176,8 @@ public class TimerLogic extends Observable {
 	 */
 	public long getSecondsLeft() {
 
-		currentSeconds = (new Date()).getTime() / 1000;
+		
+		currentSeconds = Calendar.getInstance().getTime().getTime() / 1000;
 		startedSeconds = timerStarted.getTime() / 1000;
 		secondsBase = getSecondsBase();
 		

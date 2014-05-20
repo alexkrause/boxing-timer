@@ -1,6 +1,4 @@
 Todos:
-- Bug: when going back&forth a new timer is started all the time
-- remember state when app is moved to the background and brought to the front again
 - countdown sounds
 - 2 sound profiles (boxing bell & other)
 - toggle halftime checkbox when play sounds is unchecked
@@ -10,6 +8,8 @@ Todos:
 
 
 DONE
+- Bug: when going back&forth a new timer is started all the time
+- remember state when app is moved to the background and brought to the front again
 - licensed soundfiles
 - other sound for half time buzzer
 - exit menu item - name it "back" on timer screen

@@ -9,6 +9,7 @@ import com.alex.circuitTimer.R;
 import com.alex.circuitTimer.logic.TimerLogic;
 import com.alex.circuitTimer.ui.MainMenuLogic;
 
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarActivity;
 import android.support.v4.app.Fragment;
 import android.content.Context;
@@ -63,6 +64,9 @@ public class TimerActivity extends ActionBarActivity implements Observer {
 			getSupportFragmentManager().beginTransaction()
 					.add(R.id.container, new PlaceholderFragment()).commit();
 		}
+		
+		ActionBar actionBar = getSupportActionBar();
+	    actionBar.setDisplayHomeAsUpEnabled(true);
 	}
 
 	@Override
@@ -215,15 +219,38 @@ public class TimerActivity extends ActionBarActivity implements Observer {
     
     @Override
     public void finish() {
-    	if (timerLogic != null) {
+    	
+    	discardTimerLogic();
+    	super.finish();
+    }
+
+    
+    
+	/**
+	 * clean up timerLogic instance and delete obervers, so that 
+	 * instanciated timers don't create events and play sounds
+	 */
+	private void discardTimerLogic() {
+		if (timerLogic != null) {
+    		timerLogic.deleteObservers();
     		timerLogic.pauseTimer();
     		timerLogic = null;
     	}
-    	super.finish();
+    	
     	handler.removeCallbacks(updateTimerRunner);
-    }	
+	}	
+    
+    @Override
+    public boolean onSupportNavigateUp() {
+    	finish();
+    	return true;
+    }
     
     
+    
+    /**
+     * Runnable for updating the timer display continuously
+     */
     final Runnable updateTimerRunner = new Runnable()
     {
         public void run() 
@@ -233,6 +260,7 @@ public class TimerActivity extends ActionBarActivity implements Observer {
         }
     };
     
+   
     
     /* here comes the boilerplate code */
     @Override

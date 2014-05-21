@@ -20,11 +20,15 @@ public class TimerLogic extends Observable {
 
 	private static final int TIMER_UPDATE_INTERVAL = 100;
 	private static final int COUNTDOUW_SECONDS = 5;
+	private static final int SECONDS_LEFT_GET_READY = 3;
 	public static final String TIMER_EVENT_BEGIN_ROUND = "beginRound";
 	public static final String TIMER_EVENT_ACTIVE_TIME_FINISHED = "activeTimeFinished";
 	public static final String TIMER_EVENT_HALFTIME_REACHED = "halfTimeReached";
+	public static final String TIMER_EVENT_GETREADY = "getReady";
+
 
 	private boolean halfTimeNotificationDone = false;
+	private boolean getReadyNotificationDone = false;
 	private long initialSeconds = 0;
 	private long initialSecondsRest = 10;
 	private long pausedSeconds = 0;
@@ -132,6 +136,7 @@ public class TimerLogic extends Observable {
 	 */
 	public void nextRound() {
 		halfTimeNotificationDone = false;
+		getReadyNotificationDone = false;
 		if (currentRound <= maxRounds) {
 			currentRound++;
 		}
@@ -299,6 +304,12 @@ public class TimerLogic extends Observable {
 				if (getHalfTimeReached() && !halfTimeNotificationDone) {
 					notifyObservers(TIMER_EVENT_HALFTIME_REACHED);
 					halfTimeNotificationDone = true;
+				}
+				
+				// check for rest time nearly finished
+				if ( (currentRound == 0 || restMode) && !getReadyNotificationDone && secondsLeft <= SECONDS_LEFT_GET_READY) {
+					notifyObservers(TIMER_EVENT_GETREADY);
+					getReadyNotificationDone  = true;
 				}
 					
 			}

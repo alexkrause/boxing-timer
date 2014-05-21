@@ -3,6 +3,8 @@ Todos:
 - write unit Tests for logic class
 
 DONE
+- bugfix: last round executed twice
+- add get ready sound
 - polish time display (shows time-5sec after countdown)
 - document the code
 - toggle halftime checkbox when play sounds is unchecked

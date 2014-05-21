@@ -220,6 +220,9 @@ public class TimerActivity extends ActionBarActivity implements Observer {
             else if(TimerLogic.TIMER_EVENT_HALFTIME_REACHED.equals(eventType) && playHalftimeSounds) {
             	playSound(R.raw.halftime_bell);
             }
+            else if(TimerLogic.TIMER_EVENT_GETREADY.equals(eventType)) {
+            	playSound(R.raw.get_ready);
+            }
         }
         
     }

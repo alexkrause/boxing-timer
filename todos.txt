@@ -1,4 +1,5 @@
 Todos:
+- polish time display (shows time-5sec after countdown)
 - 2 sound profiles (boxing bell & other)
 - write unit Tests for logic class
 

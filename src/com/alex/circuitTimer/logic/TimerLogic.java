@@ -193,9 +193,8 @@ public class TimerLogic extends Observable {
 	 * @return Number of seconds left for the current state of the timer (active time or rest time).
 	 */
 	public long getSecondsLeft() {
-
 		
-		currentSeconds = Calendar.getInstance().getTime().getTime() / 1000;
+		currentSeconds = new Date().getTime() / 1000;
 		startedSeconds = timerStarted.getTime() / 1000;
 		secondsBase = getSecondsBase();
 		
@@ -271,6 +270,11 @@ public class TimerLogic extends Observable {
 			// countdown before workout begin
 
 			if (secondsLeft <= 0) {
+				
+				if ( !isTimerFinished()) {
+					timerStarted = new Date();
+				}
+				
 				// this is the moment when we switch from rest mode to active mode
 				if (restMode) {
 					nextRound();
@@ -289,10 +293,6 @@ public class TimerLogic extends Observable {
 					else {
 						restMode = true;
 					}
-				}
-				
-				if ( !isTimerFinished()) {
-					timerStarted = new Date();
 				}
 			}
 			else {

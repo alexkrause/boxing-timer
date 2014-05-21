@@ -82,6 +82,7 @@
             android:layout_height="wrap_content"
             android:layout_below="@+id/rounds_spinner"
             android:checked="true"
+            android:onClick="toggleHalftimeSoundCheckbox"
             android:text="@string/label_checkbox_play_sounds" />
 
         <CheckBox

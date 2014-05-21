@@ -60,7 +60,7 @@ public class MainActivity extends ActionBarActivity {
 	protected void onStart() {
 		super.onStart();
 		
-		// load last preferences
+		// load last preferences and prepare the input elements accordingly
 		SharedPreferences settings = getSharedPreferences(TIMER_SETTINGS, 0);
 	    int selectedMinutesItem = Integer.valueOf(settings.getString(SELECTED_MINUTES_ITEM, "1")).intValue();
 	    int selectedSecondsItem = Integer.valueOf(settings.getString(SELECTED_SECONDS_ITEM, "0")).intValue();
@@ -109,6 +109,21 @@ public class MainActivity extends ActionBarActivity {
 
 	}
 
+	/**
+	 * Toggle the halftimesound-Checkbox depending on the state of the playSounds Checkbox,
+	 * as it doesn't make sens to play a Halftime sound when all other sound playback is deactivated.
+	 * @param view
+	 */
+	public void toggleHalftimeSoundCheckbox(View view) {
+		playSoundsCheckbox = (CheckBox) findViewById(R.id.checkbox_play_sounds);
+		if (playSoundsCheckbox.isChecked()) {
+			playHalftimeSoundCheckbox.setChecked(true);
+			return;
+		}
+		
+		playHalftimeSoundCheckbox.setChecked(false);
+		
+	}
 
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
@@ -124,7 +139,11 @@ public class MainActivity extends ActionBarActivity {
 		return super.onOptionsItemSelected(item);
 	}
 	
-	/** Called when the user clicks the start button */
+	
+	/** 
+	 * Called when the user clicks the start button.
+	 * Passes the settings to the timer activity.
+	 */
 	public void startTimer(View view) {
 		
 		// only start a new Activity in case it's null
@@ -157,6 +176,10 @@ public class MainActivity extends ActionBarActivity {
 		startActivity(timerIntent);
 	}
 	
+	/* 
+	 * when pausing the activity save the settings as shared preferences
+	 * @see android.support.v4.app.FragmentActivity#onPause()
+	 */
 	@Override
 	public void onPause() {
 		super.onPause();

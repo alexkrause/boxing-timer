@@ -1,13 +1,11 @@
 Todos:
-- countdown sounds
 - 2 sound profiles (boxing bell & other)
-- toggle halftime checkbox when play sounds is unchecked
-- document the code
 - write unit Tests for logic class
 
-
-
 DONE
+- document the code
+- toggle halftime checkbox when play sounds is unchecked
+- countdown sounds
 - Bug: when going back&forth a new timer is started all the time
 - remember state when app is moved to the background and brought to the front again
 - licensed soundfiles

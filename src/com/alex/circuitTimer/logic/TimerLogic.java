@@ -8,6 +8,14 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 
+/**
+ * @author SKR
+ *
+ */
+/**
+ * @author SKR
+ *
+ */
 public class TimerLogic extends Observable {
 
 	private static final int TIMER_UPDATE_INTERVAL = 100;
@@ -34,7 +42,7 @@ public class TimerLogic extends Observable {
 	long secondsLeft = 0;
 	int pausedSecondsInt = 0;
 	
-	// Thred executer for update timer thread
+	// Thred executor for update timer thread
 	ScheduledExecutorService threadExecuter;
 
 	Date timerStarted;
@@ -121,6 +129,7 @@ public class TimerLogic extends Observable {
 	
 	/**
 	 * switch to the next round in case the current one is not the last one.
+	 * Notify the observers, so that the sound playback can be triggered accordingly.
 	 */
 	public void nextRound() {
 		halfTimeNotificationDone = false;
@@ -130,6 +139,10 @@ public class TimerLogic extends Observable {
 		notifyObservers(TIMER_EVENT_BEGIN_ROUND);
 	}
 
+	/**
+	 * true if the timer has stepped through all rounds.
+	 * @return
+	 */
 	public boolean isTimerFinished() {
 		if (currentRound > maxRounds) {
 			return true;
@@ -137,6 +150,11 @@ public class TimerLogic extends Observable {
 		return false;
 	}
 
+	/**
+	 * True if the current round is the last one.
+	 * Needed to check whether or not a rest phase is needed (no rest phase after last round).
+	 * @return
+	 */
 	public boolean isLastRound() {
 		if (currentRound >= maxRounds) {
 			return true;
@@ -193,7 +211,8 @@ public class TimerLogic extends Observable {
 	}
 
 	/**
-	 * @return Number of seconds to start with. Either initial active time or initial rest time.
+	 * @return Number of seconds to perform calculations on.
+	 * Either initial active time, initial rest time or countdown time.
 	 */
 	private long getSecondsBase() {
 		if (currentRound == 0) {
@@ -208,7 +227,8 @@ public class TimerLogic extends Observable {
 
 
 	/**
-	 * @return true if the half of the active time has been reached. Always false for rest mode.
+	 * @return true if the half of the active time has been reached.
+	 * Always false for rest mode.
 	 */
 	public boolean getHalfTimeReached() {
 
@@ -221,6 +241,9 @@ public class TimerLogic extends Observable {
 
 	
 	
+	/**
+	 * schedule the next loop of the timer Runnable that controls the timer.
+	 */
 	public void runTimer() {
 		
 		if (!paused && !isTimerFinished()) {
@@ -232,6 +255,12 @@ public class TimerLogic extends Observable {
 		}
 	}
 
+	
+	/**
+	 * Method for controlling the timer within a separate thread.
+	 * Makes sure the timer is in the right state (countdown, active, rest).
+	 * Triggers playback of sounds by notifying observers at events like round begin, half time or round end.
+	 */
 	Runnable runnable = new Runnable() {
 		@Override
 		public void run() {

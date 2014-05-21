@@ -27,7 +27,7 @@
     <string name="message_validation_headline">Input Validation</string>
     <string name="title_about">About</string>
     <string name="about"><![CDATA[
-        <h1>Sports Activity Timer</h1>
+        <h1>Sports Interval Timer</h1>
         <p>&#169;2014 Alex Krause</p>
         <p>A simple and lightweight timer app for vaious sports activities like</p>
         <p>

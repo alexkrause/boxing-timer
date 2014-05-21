@@ -41,6 +41,9 @@ public class TimerActivity extends ActionBarActivity implements Observer {
     private String eventType;
     private String roundDisplay;
     
+    /**
+     * instanciate OnAudioFocusChangeListener for media playback
+     */
     OnAudioFocusChangeListener afChangeListener = new OnAudioFocusChangeListener() {
 	    public void onAudioFocusChange(int focusChange) {
 	        if (focusChange == AudioManager.AUDIOFOCUS_LOSS_TRANSIENT) {
@@ -193,6 +196,10 @@ public class TimerActivity extends ActionBarActivity implements Observer {
 		
 	}
 	
+	/* 
+	 * Called by timerlogic at events like round begin, round end, halftime reached
+	 * @see java.util.Observer#update(java.util.Observable, java.lang.Object)
+	 */
 	public void update(Observable obj, Object arg) {
 		
         if (arg instanceof String) {
@@ -217,6 +224,11 @@ public class TimerActivity extends ActionBarActivity implements Observer {
     	handler.removeCallbacks(updateTimerRunner);
     }
     
+    /* 
+     * called when closing the activity. Makes sure to discard the timer Logic object as it otherwise
+     * continue to run in the background
+     * @see android.app.Activity#finish()
+     */
     @Override
     public void finish() {
     	
@@ -240,12 +252,15 @@ public class TimerActivity extends ActionBarActivity implements Observer {
     	handler.removeCallbacks(updateTimerRunner);
 	}	
     
+    /* 
+     * called when using the back button in the action bar. 
+     * @see android.support.v7.app.ActionBarActivity#onSupportNavigateUp()
+     */
     @Override
     public boolean onSupportNavigateUp() {
     	finish();
     	return true;
     }
-    
     
     
     /**
@@ -262,7 +277,6 @@ public class TimerActivity extends ActionBarActivity implements Observer {
     
    
     
-    /* here comes the boilerplate code */
     @Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 
@@ -273,9 +287,6 @@ public class TimerActivity extends ActionBarActivity implements Observer {
 
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
-		// Handle action bar item clicks here. The action bar will
-		// automatically handle clicks on the Home/Up button, so long
-		// as you specify a parent activity in AndroidManifest.xml.
 		MainMenuLogic.processMenuSelection(item, this);
 		return super.onOptionsItemSelected(item);
 	}

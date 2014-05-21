@@ -91,6 +91,7 @@
             android:layout_height="wrap_content"
             android:layout_below="@+id/checkbox_play_sounds"
             android:checked="true"
+            android:onClick="togglePlaySoundCheckbox"
             android:text="@string/label_checkbox_play_halftime_sound" />
 
         <Button

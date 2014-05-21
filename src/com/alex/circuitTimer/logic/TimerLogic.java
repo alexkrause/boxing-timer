@@ -32,6 +32,7 @@ public class TimerLogic extends Observable {
 	private long currentRound = 0;
 	private boolean paused = false;
 	private boolean restMode = false;
+	private long timerStarted;
 	
 	// helper instance variables for memory saving
 	// when these variables had method scope the timer app
@@ -42,11 +43,8 @@ public class TimerLogic extends Observable {
 	long secondsLeft = 0;
 	int pausedSecondsInt = 0;
 	
-	// Thred executor for update timer thread
+	// Thread executor for update timer thread
 	ScheduledExecutorService threadExecuter;
-
-	Date timerStarted;
-
 
 	public long getCurrentRound() {
 		return currentRound;
@@ -93,9 +91,10 @@ public class TimerLogic extends Observable {
 		long secondsRestLong = Long.valueOf(secondsRest);
 		maxRounds = Long.valueOf(rounds);
 
+		timerStarted = System.currentTimeMillis();
+		
 		initialSeconds = minutesLong * 60 + secondsLong;
 		initialSecondsRest = minutesRestLong * 60 + secondsRestLong;
-		timerStarted = new Date();
 		halfTimeNotificationDone = false;
 		restMode = false;
 		threadExecuter = Executors.newSingleThreadScheduledExecutor();
@@ -105,7 +104,7 @@ public class TimerLogic extends Observable {
 	 * reset the timer to it's initial settings (as defined in the constructor)
 	 */
 	public void resetTimer() {
-		timerStarted = new Date();
+		timerStarted = System.currentTimeMillis();
 		restMode = false;
 		currentRound = 0;
 
@@ -156,7 +155,7 @@ public class TimerLogic extends Observable {
 	 * @return
 	 */
 	public boolean isLastRound() {
-		if (currentRound >= maxRounds) {
+		if (currentRound == maxRounds) {
 			return true;
 		}
 		return false;
@@ -181,7 +180,7 @@ public class TimerLogic extends Observable {
 		// calculate new start time
 		pausedSecondsInt = (new BigDecimal(secondsBase - pausedSeconds)).intValue();
 		cal.add(Calendar.SECOND, pausedSecondsInt * (-1));
-		timerStarted = cal.getTime();
+		timerStarted = (cal.getTime()).getTime();
 
 		paused = false;
 		pausedSeconds = 0;
@@ -194,8 +193,8 @@ public class TimerLogic extends Observable {
 	 */
 	public long getSecondsLeft() {
 		
-		currentSeconds = new Date().getTime() / 1000;
-		startedSeconds = timerStarted.getTime() / 1000;
+		currentSeconds = System.currentTimeMillis() / 1000;
+		startedSeconds = timerStarted / 1000;
 		secondsBase = getSecondsBase();
 		
 		// subtract one seconds for smoothening out the displaying of seconds
@@ -271,10 +270,6 @@ public class TimerLogic extends Observable {
 
 			if (secondsLeft <= 0) {
 				
-				if ( !isTimerFinished()) {
-					timerStarted = new Date();
-				}
-				
 				// this is the moment when we switch from rest mode to active mode
 				if (restMode) {
 					nextRound();
@@ -293,6 +288,10 @@ public class TimerLogic extends Observable {
 					else {
 						restMode = true;
 					}
+				}
+				
+				if ( !isTimerFinished()) {
+					timerStarted = System.currentTimeMillis();
 				}
 			}
 			else {

@@ -124,6 +124,22 @@ public class MainActivity extends ActionBarActivity {
 		playHalftimeSoundCheckbox.setChecked(false);
 		
 	}
+	
+	/**
+	 * Toggle the playSound-Checkbox depending on the state of the playHalftime Checkbox,
+	 * as it doesn't make sens to play a Halftime sound when all other sound playback is deactivated.
+	 * @param view
+	 */
+	public void togglePlaySoundCheckbox(View view) {
+		playHalftimeSoundCheckbox = (CheckBox) findViewById(R.id.checkbox_play_halftime_sound);
+		if (playHalftimeSoundCheckbox.isChecked()) {
+			playSoundsCheckbox.setChecked(true);
+			return;
+		}
+		
+		playHalftimeSoundCheckbox.setChecked(false);
+		
+	}
 
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {

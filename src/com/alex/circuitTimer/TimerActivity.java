@@ -140,7 +140,14 @@ public class TimerActivity extends ActionBarActivity implements Observer {
 	 */
 	private void updateTimerDisplay() {
 		secondsLeft = timerLogic.getSecondsLeft();
-	    timerTextView.setText(String.format("%02d", secondsLeft / 60) + ":" + String.format("%02d", secondsLeft%60));
+		
+		if (timerLogic.isTimerFinished()) {
+			timerTextView.setText(getResources().getString(R.string.label_done));
+		}
+		else {
+			timerTextView.setText(String.format("%02d", secondsLeft / 60) + ":" + String.format("%02d", secondsLeft%60));
+		}
+	    
 	    
 	    if (timerLogic.getCurrentRound() == 0) {
 	    	timerTextView.setTextColor(getResources().getColor(R.color.timer_grey));

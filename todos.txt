@@ -1,9 +1,9 @@
 Todos:
-- polish time display (shows time-5sec after countdown)
 - 2 sound profiles (boxing bell & other)
 - write unit Tests for logic class
 
 DONE
+- polish time display (shows time-5sec after countdown)
 - document the code
 - toggle halftime checkbox when play sounds is unchecked
 - countdown sounds
